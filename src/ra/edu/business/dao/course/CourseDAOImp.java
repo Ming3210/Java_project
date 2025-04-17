@@ -112,4 +112,49 @@ public class CourseDAOImp implements CourseDAO{
         }
     }
 
+    @Override
+    public void updateCourse(Course course) {
+        Connection conn = null;
+        CallableStatement callSt = null;
+        try {
+            conn = ConnectionDB.openConnection();
+            callSt = conn.prepareCall("{CALL UpdateCourse(?, ?, ?, ?)}");
+            callSt.setString(1, course.getCourseId());
+            callSt.setString(2, course.getCourseName());
+            callSt.setInt(3, course.getDuration());
+            callSt.setString(4, course.getInstructor());
+            callSt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(conn, callSt);
+        }
+    }
+
+
+    @Override
+    public Course getCourseById(String courseId) {
+        Course course = null;
+        Connection conn = null;
+        CallableStatement callSt = null;
+        try {
+            conn = ConnectionDB.openConnection();
+            callSt = conn.prepareCall("{CALL GetCourseById(?)}");
+            callSt.setString(1, courseId);
+            ResultSet rs = callSt.executeQuery();
+            if (rs.next()) {
+                course = new Course();
+                course.setCourseId(rs.getString("course_id"));
+                course.setCourseName(rs.getString("name"));
+                course.setDuration(rs.getInt("duration"));
+                course.setInstructor(rs.getString("instructor"));
+                course.setCreatedAt(rs.getDate("create_at").toLocalDate());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(conn, callSt);
+        }
+        return course;
+    }
 }

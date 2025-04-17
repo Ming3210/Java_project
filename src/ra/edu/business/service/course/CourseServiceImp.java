@@ -40,5 +40,15 @@ public class CourseServiceImp implements CourseService{
         courseDAO.addCourse(course);
     }
 
+    @Override
+    public void updateCourse(Course course) {
+        courseDAO.updateCourse(course);
+    }
+
+    @Override
+    public Course getCourseById(String courseId) {
+        return courseDAO.getCourseById(courseId);
+    }
+
 
 }

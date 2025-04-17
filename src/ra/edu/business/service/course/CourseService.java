@@ -9,4 +9,6 @@ public interface CourseService {
     List<Course> getCoursesByPage(int pageSize);
     boolean isCourseIdExists(String courseId);
     void addCourse(Course course);
+    void updateCourse(Course course);
+    Course getCourseById(String courseId);
 }

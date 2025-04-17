@@ -9,4 +9,6 @@ public interface CourseDAO {
     List<Course> getCoursesByPage(int page);
     boolean isCourseIdExists(String courseId);
     void addCourse(Course course);
+    void updateCourse(Course course);
+    Course getCourseById(String courseId);
 }

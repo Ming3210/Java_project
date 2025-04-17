@@ -92,38 +92,58 @@ public class AdminUI {
 
 
     public static void showUpdateCourseMenu(Scanner scanner) {
+        CourseService courseService = new CourseServiceImp();
         System.out.println("→ Nhập ID khóa học cần chỉnh sửa: ");
         String courseId = scanner.nextLine();
 
-        while (true) {
+        Course course = courseService.getCourseById(courseId);
+        if (course == null) {
+            System.out.println("Không tìm thấy khóa học có ID: " + courseId);
+            return;
+        }
+
+        do {
             System.out.println("\n== CHỈNH SỬA KHÓA HỌC #" + courseId + " ==");
             System.out.println("1. Sửa tên khóa học");
-            System.out.println("2. Sửa thời lương");
+            System.out.println("2. Sửa thời lượng");
             System.out.println("3. Sửa tên giảng viên");
-            System.out.println("0. Quay lại menu chính");
+            System.out.println("4. Lưu thay đổi");
+            System.out.println("0. Hủy và quay lại");
             System.out.print("Chọn thuộc tính cần sửa: ");
             String choice = scanner.nextLine();
 
             switch (choice) {
                 case "1":
-                    System.out.print("Nhập tên mới: ");
-                    String newName = scanner.nextLine();
+                    course.setCourseName(Validator.checkString("Nhập tên mới: ",scanner, 5, 100));
                     break;
                 case "2":
-                    System.out.print("Nhập thời lương mới: ");
-                    String newDescription = scanner.nextLine();
+                    course.setDuration((Validator.checkInt("Nhập thời lượng mới: ",scanner)));
                     break;
                 case "3":
-                    System.out.print("Nhập tên giảng viên mới: ");
-
+                    course.setInstructor(Validator.checkString("Nhập tên giảng viên mới: ", scanner, 5, 100));
                     break;
+                case "4":
+                    boolean checkConfirm = Validator.checkBoolean("Bạn có chắc chắn muốn lưu thay đổi không? (true/false): ", scanner);
+                    if (checkConfirm) {
+                        try {
+                            courseService.updateCourse(course);
+                            System.out.println("Cập nhật khóa học thành công!");
+                        } catch (Exception e) {
+                            System.out.println("Cập nhật khóa học thất bại: " + e.getMessage());
+                        }
+                    } else {
+                        System.out.println("Hủy cập nhật khóa học.");
+                    }
+                    return;
                 case "0":
+                    System.out.println("Hủy chỉnh sửa.");
                     return;
                 default:
                     System.out.println("Lựa chọn không hợp lệ.");
             }
-        }
+        }while (true);
     }
+
 
     public static void paginatedCourse(Scanner scanner){
         int totalPages = courseService.getTotalPages();
