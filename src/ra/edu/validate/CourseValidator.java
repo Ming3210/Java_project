@@ -1,11 +1,10 @@
 package ra.edu.validate;
 
-import ra.edu.business.dao.course.CourseDAO;
 import ra.edu.business.service.course.CourseService;
 
 import java.util.Scanner;
 
-public class Validator {
+public class CourseValidator {
     public static int checkInt(String message, Scanner scanner) {
         boolean checkInt = false;
         System.out.println(message);

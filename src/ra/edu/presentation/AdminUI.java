@@ -1,10 +1,9 @@
 package ra.edu.presentation;
 
-import ra.edu.business.dao.course.CourseDAO;
 import ra.edu.business.model.Course;
 import ra.edu.business.service.course.CourseService;
 import ra.edu.business.service.course.CourseServiceImp;
-import ra.edu.validate.Validator;
+import ra.edu.validate.CourseValidator;
 
 import java.util.List;
 import java.util.Scanner;
@@ -114,16 +113,16 @@ public class AdminUI {
 
             switch (choice) {
                 case "1":
-                    course.setCourseName(Validator.checkString("Nhập tên mới: ",scanner, 5, 100));
+                    course.setCourseName(CourseValidator.checkString("Nhập tên mới: ",scanner, 5, 100));
                     break;
                 case "2":
-                    course.setDuration((Validator.checkInt("Nhập thời lượng mới: ",scanner)));
+                    course.setDuration((CourseValidator.checkInt("Nhập thời lượng mới: ",scanner)));
                     break;
                 case "3":
-                    course.setInstructor(Validator.checkString("Nhập tên giảng viên mới: ", scanner, 5, 100));
+                    course.setInstructor(CourseValidator.checkString("Nhập tên giảng viên mới: ", scanner, 5, 100));
                     break;
                 case "4":
-                    boolean checkConfirm = Validator.checkBoolean("Bạn có chắc chắn muốn lưu thay đổi không? (true/false): ", scanner);
+                    boolean checkConfirm = CourseValidator.checkBoolean("Bạn có chắc chắn muốn lưu thay đổi không? (true/false): ", scanner);
                     if (checkConfirm) {
                         try {
                             courseService.updateCourse(course);
@@ -210,10 +209,10 @@ public class AdminUI {
 
     public static void addCourse(Scanner scanner) {
         try {
-            String courseId = Validator.inputCourseId("Nhập ID khóa học:", scanner, courseService);
-            String courseName = Validator.checkString("Nhập tên khóa học:", scanner, 5, 100);
-            int duration = Validator.checkInt("Nhập thời lượng khóa học (phút):", scanner);
-            String instructor = Validator.checkString("Nhập tên giảng viên:", scanner, 5, 100);
+            String courseId = CourseValidator.inputCourseId("Nhập ID khóa học:", scanner, courseService);
+            String courseName = CourseValidator.checkString("Nhập tên khóa học:", scanner, 5, 100);
+            int duration = CourseValidator.checkInt("Nhập thời lượng khóa học (phút):", scanner);
+            String instructor = CourseValidator.checkString("Nhập tên giảng viên:", scanner, 5, 100);
             Course newCourse = new Course();
             newCourse.setCourseId(courseId);
             newCourse.setCourseName(courseName);
