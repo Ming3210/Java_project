@@ -11,4 +11,11 @@ public interface CourseDAO {
     void addCourse(Course course);
     void updateCourse(Course course);
     Course getCourseById(String courseId);
+    void deleteCourse(String courseId);
+    int getTotalSearchCourses(String searchName);
+    List<Course> GetCoursesBySearchNamePages(String searchName, int pageSize);
+    List<Course> SortCoursesByNameAsc(int page);
+    List<Course> SortCoursesByNameDesc(int page);
+    List<Course> SortCoursesByIdAsc(int page);
+    List<Course> SortCoursesByIdDesc(int page);
 }
