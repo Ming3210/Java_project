@@ -30,5 +30,15 @@ public class CourseServiceImp implements CourseService{
         return courseDAO.getCoursesByPage(pageNumber);
     }
 
+    @Override
+    public boolean isCourseIdExists(String courseId) {
+        return courseDAO.isCourseIdExists(courseId);
+    }
+
+    @Override
+    public void addCourse(Course course) {
+        courseDAO.addCourse(course);
+    }
+
 
 }

@@ -4,13 +4,15 @@ import ra.edu.business.dao.course.CourseDAO;
 import ra.edu.business.model.Course;
 import ra.edu.business.service.course.CourseService;
 import ra.edu.business.service.course.CourseServiceImp;
+import ra.edu.validate.Validator;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class AdminUI {
+    static CourseService courseService = new CourseServiceImp();
     public static void showAdminMenu(Scanner scanner) {
-        CourseService courseService = new CourseServiceImp();
+
         do {
             System.out.println("\n===== MENU ADMIN – QUẢN LÝ KHÓA HỌC =====");
             System.out.println("1. Hiển thị danh sách khóa học");
@@ -26,70 +28,11 @@ public class AdminUI {
             switch (choice) {
                 case "1":
                     System.out.println("→ Hiển thị danh sách khóa học");
-
-                    int totalPages = courseService.getTotalPages();
-                    System.out.println("Tổng số trang: " + totalPages);
-
-                    int currentPage = 1;
-                    boolean continuePaging = true;
-
-                    while (continuePaging) {
-                        System.out.println("\nTrang hiện tại: " + currentPage);
-                        List<Course> courseList = courseService.getCoursesByPage(currentPage);
-
-                        if (courseList.isEmpty()) {
-                            System.out.println("Không có khóa học nào.");
-                        } else {
-                            System.out.println("Danh sách khóa học:");
-                            for (Course course : courseList) {
-                                System.out.println("ID: " + course.getCourseId() + " - Tên: " + course.getCourseName() + " - Thời lượng: " + course.getDuration() +" phút");
-                            }
-                        }
-
-                        System.out.println("\n1. Tiếp theo");
-                        System.out.println("2. Quay lại");
-                        System.out.println("3. Chọn trang");
-                        System.out.println("0. Quay lại menu chính");
-                        System.out.print("Chọn chức năng: ");
-                        String paginationChoice = scanner.nextLine();
-
-                        switch (paginationChoice) {
-                            case "1":
-                                if (currentPage < totalPages) {
-                                    currentPage++;
-                                } else {
-                                    System.out.println("Đã ở trang cuối cùng.");
-                                    continue;
-                                }
-                                break;
-                            case "2":
-                                if (currentPage > 1) {
-                                    currentPage--;
-
-                                } else {
-                                    System.out.println("Đã ở trang đầu tiên.");
-                                    continue;
-                                }
-                                break;
-                            case "3":
-                                System.out.print("Nhập số trang cần xem (1 đến " + totalPages + "): ");
-                                int selectedPage = Integer.parseInt(scanner.nextLine());
-                                if (selectedPage >= 1 && selectedPage <= totalPages) {
-                                    currentPage = selectedPage;
-                                } else {
-                                    System.out.println("Số trang không hợp lệ.");
-                                }
-                                break;
-                            case "0":
-                                continuePaging = false;
-                                break;
-                            default:
-                                System.out.println("Lựa chọn không hợp lệ.");
-                        }
-                    }
+                    paginatedCourse(scanner);
                     break;
                 case "2":
                     System.out.println("→ Thêm mới khóa học");
+                    addCourse(scanner);
                     break;
                 case "3":
                     showUpdateCourseMenu(scanner);
@@ -177,8 +120,93 @@ public class AdminUI {
                 case "0":
                     return;
                 default:
-                    System.out.println("⚠️ Lựa chọn không hợp lệ.");
+                    System.out.println("Lựa chọn không hợp lệ.");
             }
+        }
+    }
+
+    public static void paginatedCourse(Scanner scanner){
+        int totalPages = courseService.getTotalPages();
+        System.out.println("Tổng số trang: " + totalPages);
+
+        int currentPage = 1;
+        boolean continuePaging = true;
+
+        while (continuePaging) {
+            System.out.println("\nTrang hiện tại: " + currentPage);
+            List<Course> courseList = courseService.getCoursesByPage(currentPage);
+
+            if (courseList.isEmpty()) {
+                System.out.println("Không có khóa học nào.");
+            } else {
+                System.out.println("Danh sách khóa học:");
+                for (Course course : courseList) {
+                    System.out.println("ID: " + course.getCourseId() + " - Tên: " + course.getCourseName() + " - Thời lượng: " + course.getDuration() +" phút");
+                }
+            }
+
+            System.out.println("\n1. Tiếp theo");
+            System.out.println("2. Quay lại");
+            System.out.println("3. Chọn trang");
+            System.out.println("0. Quay lại menu chính");
+            System.out.print("Chọn chức năng: ");
+            String paginationChoice = scanner.nextLine();
+
+            switch (paginationChoice) {
+                case "1":
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                    } else {
+                        System.out.println("Đã ở trang cuối cùng.");
+                        continue;
+                    }
+                    break;
+                case "2":
+                    if (currentPage > 1) {
+                        currentPage--;
+
+                    } else {
+                        System.out.println("Đã ở trang đầu tiên.");
+                        continue;
+                    }
+                    break;
+                case "3":
+                    System.out.print("Nhập số trang cần xem (1 đến " + totalPages + "): ");
+                    int selectedPage = Integer.parseInt(scanner.nextLine());
+                    if (selectedPage >= 1 && selectedPage <= totalPages) {
+                        currentPage = selectedPage;
+                    } else {
+                        System.out.println("Số trang không hợp lệ.");
+                    }
+                    break;
+                case "0":
+                    continuePaging = false;
+                    break;
+                default:
+                    System.out.println("Lựa chọn không hợp lệ.");
+            }
+        }
+    }
+
+    public static void addCourse(Scanner scanner) {
+        try {
+            String courseId = Validator.inputCourseId("Nhập ID khóa học:", scanner, courseService);
+            String courseName = Validator.checkString("Nhập tên khóa học:", scanner, 5, 100);
+            int duration = Validator.checkInt("Nhập thời lượng khóa học (phút):", scanner);
+            String instructor = Validator.checkString("Nhập tên giảng viên:", scanner, 5, 100);
+            Course newCourse = new Course();
+            newCourse.setCourseId(courseId);
+            newCourse.setCourseName(courseName);
+            newCourse.setDuration(duration);
+            newCourse.setInstructor(instructor);
+            try {
+                courseService.addCourse(newCourse);
+                System.out.println("Thêm khóa học thành công!");
+            } catch (Exception e) {
+                System.out.println("Thêm khóa học thất bại: " + e.getMessage());
+            }
+        } catch (Exception e) {
+            System.out.println("Đã xảy ra lỗi: " + e.getMessage());
         }
     }
 

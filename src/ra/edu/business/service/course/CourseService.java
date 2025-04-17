@@ -7,4 +7,6 @@ import java.util.List;
 public interface CourseService {
     int getTotalPages();
     List<Course> getCoursesByPage(int pageSize);
+    boolean isCourseIdExists(String courseId);
+    void addCourse(Course course);
 }
