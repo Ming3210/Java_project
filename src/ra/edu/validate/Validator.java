@@ -6,6 +6,8 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Validator {
+    public static final String RED = "\u001B[31m";
+    public static final String RESET = "\u001B[0m";
     public static int checkInt(String message, Scanner scanner) {
         boolean checkInt = false;
         System.out.println(message);
@@ -76,22 +78,37 @@ public class Validator {
         }
     }
 
-    public static String checkString(String message, Scanner scanner, int min, int max){
+    public static String checkString(String message, Scanner scanner, int min, int max) {
         boolean checkString = false;
         System.out.println(message);
         while (!checkString) {
             try {
                 String input = scanner.nextLine();
-                if(input.isEmpty() || input.length() < min || input.length() > max){
-                    throw new Exception("Giá trị nhập ko hợp lệ, vui lòng nhập chuỗi từ " + min + " đến " + max + " ký tự và không có chuỗi rỗng");
+
+                if (input.isEmpty()) {
+                    throw new Exception(RED + "Chuỗi không được để trống" + RESET);
                 }
+
+                if (input.length() < min || input.length() > max) {
+                    throw new Exception(RED + "Vui lòng nhập chuỗi từ " + min + " đến " + max + " ký tự" + RESET);
+                }
+
+                if (!input.equals(input.trim())) {
+                    throw new Exception(RED + "Không được có khoảng trắng ở đầu hoặc cuối chuỗi" + RESET);
+                }
+
+                if (input.matches(".*\\s{2,}.*")) {
+                    throw new Exception(RED + "Không được có nhiều hơn một khoảng trắng giữa các từ" + RESET);
+                }
+
                 return input.trim();
             } catch (Exception e) {
-                System.out.println("Giá trị nhập ko hợp lệ, vui lòng nhập chuỗi từ " + min + " đến " + max + " ký tự và không có khoảng trắng đầu và cuối");
+                System.out.println(e.getMessage());
             }
         }
         return "";
     }
+
 
     public static String checkEmail(String message, Scanner scanner){
         boolean checkEmail = false;
