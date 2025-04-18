@@ -5,7 +5,7 @@ import ra.edu.business.service.login.LoginServiceImp;
 
 import java.util.Scanner;
 
-import static ra.edu.presentation.AdminUI.showAdminMenu;
+import static ra.edu.presentation.AdminUI.showMainMenu;
 
 public class MainApplication {
     public static void main(String[] args) {
@@ -28,7 +28,7 @@ public class MainApplication {
             switch (loginResult) {
                 case 1:
                     System.out.println("Đăng nhập thành công với tư cách Admin!");
-                    showAdminMenu(scanner);
+                    showMainMenu(scanner);
                     break;
                 case 2:
                     System.out.println("Đăng nhập thành công với tư cách Sinh viên!");

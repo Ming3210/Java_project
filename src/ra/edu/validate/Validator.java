@@ -1,5 +1,8 @@
 package ra.edu.validate;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Validator {
@@ -124,5 +127,26 @@ public class Validator {
             }
         }
         return "";
+    }
+
+    public static LocalDate checkDate(String message, Scanner scanner) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        System.out.println(message);
+        while (true) {
+            try {
+                String input = scanner.nextLine();
+                LocalDate date = LocalDate.parse(input, formatter);
+
+                if (date.isAfter(LocalDate.now())) {
+                    throw new Exception("Ngày không được lớn hơn ngày hiện tại.");
+                }
+
+                return date;
+            } catch (DateTimeParseException e) {
+                System.out.println("Ngày không hợp lệ. Định dạng đúng là dd/MM/yyyy (ví dụ: 15/04/2024)");
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }
