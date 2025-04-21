@@ -6,6 +6,7 @@ package ra.edu.business.service.student;
 
 import ra.edu.business.dao.student.StudentDAO;
 import ra.edu.business.dao.student.StudentDAOImp;
+import ra.edu.business.model.RegisteredCourseDTO;
 import ra.edu.business.model.Student;
 
 import java.util.List;
@@ -77,5 +78,35 @@ public class StudentServiceImp implements StudentService{
     @Override
     public List<Student> SortStudentByIdDesc(int page) {
         return studentDAO.SortStudentByIdDesc(page);
+    }
+
+    @Override
+    public Student getStudentByEmail(String email) {
+        return studentDAO.getStudentByEmail(email);
+    }
+
+    @Override
+    public void registerEnrollment(String studentId, String courseId) {
+        studentDAO.registerEnrollment(studentId, courseId);
+    }
+
+    @Override
+    public List<RegisteredCourseDTO> showAllRegistedEnrollment(String studentId) {
+        return studentDAO.showAllRegistedEnrollment(studentId);
+    }
+
+    @Override
+    public void cancelEnrollment(String studentId, String courseId) {
+        studentDAO.cancelEnrollment(studentId, courseId);
+    }
+
+    @Override
+    public boolean checkOldPassword(String studentId, String password) {
+        return studentDAO.checkOldPassword(studentId, password);
+    }
+
+    @Override
+    public void updatePassword(String studentId, String password) {
+        studentDAO.updatePassword(studentId, password);
     }
 }

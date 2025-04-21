@@ -1,6 +1,7 @@
 package ra.edu.business.service.student;
 
 
+import ra.edu.business.model.RegisteredCourseDTO;
 import ra.edu.business.model.Student;
 
 import java.util.List;
@@ -18,4 +19,12 @@ public interface StudentService {
     List<Student> SortStudentByNameDesc(int page);
     List<Student> SortStudentByIdAsc(int page);
     List<Student> SortStudentByIdDesc(int page);
+    Student getStudentByEmail(String email);
+    void registerEnrollment(String studentId, String courseId);
+    List<RegisteredCourseDTO> showAllRegistedEnrollment(String studentId);
+    void cancelEnrollment(String studentId, String courseId);
+    boolean checkOldPassword(String studentId, String password);
+    void updatePassword(String studentId, String password);
+
+
 }

@@ -526,6 +526,11 @@ public class AdminUI {
         String courseId = CourseValidator.inputExistingCourseId("→ Nhập ID khóa học cần chỉnh sửa: ", scanner, courseService);
 
         Course course = courseService.getCourseById(courseId);
+
+        if (course == null) {
+            System.out.println("Không tìm thấy khóa học có ID: " + courseId);
+            return;
+        }
         System.out.println(YELLOW + "== THÔNG TIN KHÓA HỌC " + course.getCourseId() + " ==" + RESET);
         System.out.printf(GREEN + "%-15s" + RESET + ": " + BLUE + "%s\n" + RESET, "ID khóa học", course.getCourseId());
         System.out.printf(GREEN + "%-15s" + RESET + ": " + BLUE + "%s\n" + RESET, "Tên khóa học", course.getCourseName());
@@ -533,10 +538,7 @@ public class AdminUI {
         System.out.printf(GREEN + "%-15s" + RESET + ": " + BLUE + "%s\n" + RESET, "Giảng viên", course.getInstructor());
 
 
-        if (course == null) {
-            System.out.println("Không tìm thấy khóa học có ID: " + courseId);
-            return;
-        }
+
 
         do {
             System.out.println("\n== CHỈNH SỬA KHÓA HỌC #" + courseId + " ==");

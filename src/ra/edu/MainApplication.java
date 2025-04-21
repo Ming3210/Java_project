@@ -1,16 +1,20 @@
 package ra.edu;
 
+import ra.edu.business.model.Session;
+import ra.edu.business.model.Student;
 import ra.edu.business.service.login.LoginService;
 import ra.edu.business.service.login.LoginServiceImp;
+import ra.edu.business.service.student.StudentService;
+import ra.edu.business.service.student.StudentServiceImp;
 import ra.edu.validate.LoginValidator;
 import ra.edu.validate.Validator;
 
 import java.util.Scanner;
 
 import static ra.edu.presentation.AdminUI.showMainMenu;
+import static ra.edu.presentation.StudentUI.showStudentMenu;
 
 public class MainApplication {
-    // Mã màu ANSI
     public static final String RESET = "\u001B[0m";
     public static final String RED = "\u001B[31m";
     public static final String GREEN = "\u001B[32m";
@@ -24,6 +28,7 @@ public class MainApplication {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         LoginService loginService = new LoginServiceImp();
+        StudentService studentService = new StudentServiceImp();
 
         int loginResult = 0;
 
@@ -44,7 +49,15 @@ public class MainApplication {
                     break;
                 case 2:
                     System.out.println(GREEN + "Đăng nhập thành công với tư cách Sinh viên!" + RESET);
-                    showStudentMenu(scanner);
+                    Student student = studentService.getStudentByEmail(username);
+                    if (student != null) {
+                        Session.currentStudent = student;
+                        System.out.println(PURPLE+"Xin chào " + student.getName() + "!" + RESET);
+                        showStudentMenu(scanner);
+                    } else {
+                        System.out.println(RED+"Có lỗi trong quá trình đăng nhập "+RESET);
+                    }
+
                     break;
                 default:
                     System.out.println(RED + "Sai thông tin đăng nhập. Vui lòng thử lại!\n" + RESET);
@@ -52,32 +65,5 @@ public class MainApplication {
         }
     }
 
-    public static void showStudentMenu(Scanner scanner) {
-        while (true) {
-            System.out.println(BLUE + BOLD + "╔══════════════════════════════════════╗" + RESET);
-            System.out.println(BLUE + BOLD + "║            MENU SINH VIÊN            ║" + RESET);
-            System.out.println(BLUE + BOLD + "╠══════════════════════════════════════╣" + RESET);
-            System.out.println(BLUE + "║ 1. Xem thông tin cá nhân             ║" + RESET);
-            System.out.println(BLUE + "║ 2. Đổi mật khẩu                      ║" + RESET);
-            System.out.println(BLUE + "║ 0. Đăng xuất                         ║" + RESET);
-            System.out.println(BLUE + BOLD + "╚══════════════════════════════════════╝" + RESET);
-            System.out.print(CYAN + "Chọn chức năng: " + RESET);
-            String choice = scanner.nextLine();
 
-            switch (choice) {
-                case "1":
-                    System.out.println(GREEN + "📋 Hiển thị thông tin sinh viên" + RESET);
-                    break;
-                case "2":
-                    System.out.println(GREEN + "🔒 Chức năng đổi mật khẩu" + RESET);
-                    break;
-                case "0":
-                    System.out.println(RED + "👋 Đăng xuất thành công!" + RESET);
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println(RED + "⚠ Lựa chọn không hợp lệ." + RESET);
-            }
-        }
-    }
 }
