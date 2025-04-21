@@ -31,13 +31,18 @@ public class StudentServiceImp implements StudentService{
     }
 
     @Override
-    public void addStudent(Student student, String username, String password) {
-        studentDAO.addStudent(student, username, password);
+    public void addStudent(Student student) {
+        studentDAO.addStudent(student);
     }
 
     @Override
     public boolean isStudentIdExists(String studentId) {
         return studentDAO.isStudentIdExists(studentId);
+    }
+
+    @Override
+    public boolean checkEmailExist(String email) {
+        return studentDAO.checkEmailExist(email);
     }
 
 //    @Override
@@ -109,4 +114,16 @@ public class StudentServiceImp implements StudentService{
     public void updatePassword(String studentId, String password) {
         studentDAO.updatePassword(studentId, password);
     }
+
+    @Override
+    public int getTotalRegistedEnrollmentPages(String studentId) {
+        return studentDAO.getTotalRegistedEnrollmentPages(studentId);
+    }
+
+    @Override
+    public List<RegisteredCourseDTO> getRegistedEnrollmentByPage(String studentId, int page) {
+        return studentDAO.getRegistedEnrollmentByPage(studentId,page);
+    }
+
+
 }

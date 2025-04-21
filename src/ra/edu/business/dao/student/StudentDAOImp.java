@@ -67,13 +67,13 @@ public class StudentDAOImp implements StudentDAO{
     }
 
     @Override
-    public void addStudent(Student student, String username, String password) {
+    public void addStudent(Student student) {
         Connection conn = null;
         CallableStatement callSt = null;
 
         try {
             conn = ConnectionDB.openConnection();
-            callSt = conn.prepareCall("{CALL AddNewStudent(?, ?, ?, ?, ?, ?, ?, ?)}");
+            callSt = conn.prepareCall("{CALL AddNewStudent(?, ?, ?, ?, ?, ?)}");
 
             callSt.setString(1, student.getStudentId());
             callSt.setString(2, student.getName());
@@ -81,9 +81,6 @@ public class StudentDAOImp implements StudentDAO{
             callSt.setString(4, student.getEmail());
             callSt.setBoolean(5, student.isGender());
             callSt.setString(6, student.getPhone());
-            callSt.setString(7, username);
-            callSt.setString(8, password);
-
             callSt.executeUpdate();
 
         } catch (SQLException e) {
@@ -114,6 +111,28 @@ public class StudentDAOImp implements StudentDAO{
             ConnectionDB.closeConnection(conn, callSt);
         }
 
+        return exists;
+    }
+
+    @Override
+    public boolean checkEmailExist(String email) {
+        Connection conn = null;
+        CallableStatement callSt = null;
+        boolean exists = false;
+        try {
+            conn = ConnectionDB.openConnection();
+            callSt = conn.prepareCall("{CALL checkEmailExist(?,?)}");
+            callSt.setString(1, email);
+            callSt.registerOutParameter(2, Types.BOOLEAN);
+            callSt.execute();
+
+            exists = callSt.getBoolean(2);
+
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi kiểm tra tồn tại email: " + e.getMessage());
+        } finally {
+            ConnectionDB.closeConnection(conn, callSt);
+        }
         return exists;
     }
 
@@ -155,9 +174,7 @@ public class StudentDAOImp implements StudentDAO{
             conn = ConnectionDB.openConnection();
             callSt = conn.prepareCall("{CALL deleteStudent(?)}");
             callSt.setString(1, studentId);
-
             callSt.executeUpdate();
-
         } catch (SQLException e) {
             System.err.println("Lỗi khi xoá sinh viên: " + e.getMessage());
         } finally {
@@ -458,6 +475,55 @@ public class StudentDAOImp implements StudentDAO{
         } finally {
             ConnectionDB.closeConnection(conn, callSt);
         }
+    }
+
+    @Override
+    public int getTotalRegistedEnrollmentPages(String studentId) {
+        int totalPages = 0;
+        Connection conn = null;
+        CallableStatement callSt = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionDB.openConnection();
+            callSt = conn.prepareCall("{CALL getTotalRegistedEnrollmentPages(?)}");
+            callSt.setString(1, studentId);
+            rs = callSt.executeQuery();
+            while (rs.next()) {
+                totalPages = rs.getInt("total_pages");
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy tổng số khóa học đã đăng ký: " + e.getMessage());
+        } finally {
+            ConnectionDB.closeConnection(conn, callSt);
+        }
+        return totalPages;
+    }
+
+    @Override
+    public List<RegisteredCourseDTO> getRegistedEnrollmentByPage(String studentId, int page) {
+        Connection conn = null;
+        CallableStatement callSt = null;
+        ResultSet rs = null;
+        List<RegisteredCourseDTO> registeredCourseDTOs = new ArrayList<>();
+        try {
+            conn = ConnectionDB.openConnection();
+            callSt = conn.prepareCall("{CALL getRegistedEnrollmentByPage(?, ?)}");
+            callSt.setString(1, studentId);
+            callSt.setInt(2, page);
+            rs = callSt.executeQuery();
+            while (rs.next()) {
+                RegisteredCourseDTO registeredCourseDTO = new RegisteredCourseDTO();
+                registeredCourseDTO.setCourseId(rs.getString("course_id"));
+                registeredCourseDTO.setCourseName(rs.getString("name"));
+                registeredCourseDTO.setStatus(rs.getString("status"));
+                registeredCourseDTOs.add(registeredCourseDTO);
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách khóa học đã đăng ký: " + e.getMessage());
+        } finally {
+            ConnectionDB.closeConnection(conn, callSt);
+        }
+        return registeredCourseDTOs;
     }
 
 

@@ -9,9 +9,10 @@ import java.util.List;
 public interface StudentService {
     int getTotalStudentPages();
     List<Student> getStudentsByPage(int page);
-    void addStudent(Student student, String username, String password);
+    void addStudent(Student student);
     boolean isStudentIdExists(String studentId);
-//    void updateStudent(Student student);
+    boolean checkEmailExist(String email);
+    //    void updateStudent(Student student);
     void deleteStudent(String studentId);
     List<Student> searchStudents(String searchTerm, int page);
     int getSearchStudentsByPage(String searchName);
@@ -25,6 +26,7 @@ public interface StudentService {
     void cancelEnrollment(String studentId, String courseId);
     boolean checkOldPassword(String studentId, String password);
     void updatePassword(String studentId, String password);
-
+    int getTotalRegistedEnrollmentPages(String studentId);
+    List<RegisteredCourseDTO> getRegistedEnrollmentByPage(String studentId, int page);
 
 }

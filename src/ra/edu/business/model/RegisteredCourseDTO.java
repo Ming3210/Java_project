@@ -4,11 +4,27 @@ public class RegisteredCourseDTO {
     private String courseId;
     private String courseName;
     private String status;
+    private String studentId;
+
+    public RegisteredCourseDTO(String courseId, String courseName, String status, String studentId) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.status = status;
+        this.studentId = studentId;
+    }
 
     public RegisteredCourseDTO(String courseId, String courseName, String status) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.status = status;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public RegisteredCourseDTO() {

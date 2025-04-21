@@ -179,19 +179,91 @@ public class StudentUI {
     }
 
     public static void showAllRegistedEnrollment(Scanner scanner){
-        System.out.println(BOLD + CYAN + "❯❯❯ DANH SÁCH KHÓA HỌC ĐÃ ĐĂNG KÝ ❮❮❮" + RESET);
-        System.out.println(BOLD + "╔════════╦═══════════════════════════════════╦═══════════════╗" + RESET);
-        System.out.println(BOLD + "║   ID   ║              TÊN KHÓA HỌC         ║ STATUS        ║" + RESET);
-        System.out.println(BOLD + "╠════════╬═══════════════════════════════════╬═══════════════╬" + RESET);
-        List<RegisteredCourseDTO> courseList = studentService.showAllRegistedEnrollment(Session.currentStudent.getStudentId());
-        if (courseList.isEmpty()) {
-            System.out.println(BOLD + RED + "Không có khóa học nào." + RESET);
-        } else {
-            for (RegisteredCourseDTO course : courseList) {
-                System.out.printf(BOLD + "║" + GREEN + " %-6s " + RESET + BOLD + "║" + CYAN + " %-33s " + RESET + BOLD + "║" + YELLOW + " %-13s " + RESET + BOLD + "║\n" + RESET,
-                        course.getCourseId(), course.getCourseName(), course.getStatus());
+        String studentId = Session.currentStudent.getStudentId();
+        int totalPages = studentService.getTotalRegistedEnrollmentPages(studentId);
+        System.out.println(BOLD + BLUE + "════════════════════════════════════════" + RESET);
+        System.out.println(BOLD + BLUE + "   Tổng số trang: " + RESET + YELLOW + totalPages + RESET);
+        System.out.println(BOLD + BLUE + "════════════════════════════════════════" + RESET);
+        int currentPage = 1;
+        boolean continuePaging = true;
+        boolean isEdge = false;
+        while (continuePaging){
+            if (!isEdge){
+                System.out.println(BOLD + BLUE + "═════════════════════════════════════" + RESET);
+                System.out.println(BOLD + BLUE + "   Trang hiện tại: " + RESET + YELLOW + currentPage + "/" + totalPages + RESET);
+                System.out.println(BOLD + BLUE + "═════════════════════════════════════" + RESET);
+                List<RegisteredCourseDTO> registeredEnrollment = studentService.getRegistedEnrollmentByPage(studentId, currentPage);
+                if (registeredEnrollment.isEmpty()){
+                    System.out.println(BOLD + RED + "Không có khóa học nào." + RESET);
+                } else {
+                    System.out.println(BOLD + CYAN + "❯❯❯ DANH SÁCH KHÓA HỌC ĐÃ ĐĂNG KÝ ❮❮❮" + RESET);
+                    System.out.println(BOLD + "╔════════╦═══════════════════════════╦═══════════════╗" + RESET);
+                    System.out.println(BOLD + "║   ID   ║         TÊN KHÓA HỌC      ║ STATUS        ║" + RESET);
+                    System.out.println(BOLD + "╠════════╬═══════════════════════════╬═══════════════╣" + RESET);
+
+                    for (RegisteredCourseDTO enrollment : registeredEnrollment) {
+                        System.out.printf(BOLD + "║" + GREEN + " %-6s " + RESET + BOLD + "║" + CYAN + " %-25s "  +
+                                        RESET+ BOLD +"║"+ YELLOW +" %-13s "+RESET+ BOLD +"║"+ BOLD+"\n" +RESET,
+                                enrollment.getCourseId(), enrollment.getCourseName(), enrollment.getStatus());
+                    }
+
+                    System.out.println(BOLD+"╚════════╩═══════════════════════════╩═══════════════╝"+RESET);
+
+                }
             }
-            System.out.println(BOLD + "╚════════╩═══════════════════════════════════╩═══════════════╝" + RESET);
+
+            System.out.println(BOLD + PURPLE + "\n┌─────────── ĐIỀU HƯỚNG ──────────────┐" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + GREEN + "1. Tiếp theo" + RESET +   "                      " + BOLD + PURPLE + "  │" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + BLUE + "2. Quay lại" + RESET +   "                       " + BOLD + PURPLE + "  │" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET +   "                      " + BOLD + PURPLE + " │" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu quản lý khóa học" + RESET +  "  " + BOLD + PURPLE + " │" + RESET);
+            System.out.println(BOLD + PURPLE + "└─────────────────────────────────────┘" + RESET);
+            System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
+            String paginationChoice = scanner.nextLine();
+            isEdge = false;
+
+            switch (paginationChoice) {
+                case "1":
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                    } else {
+                        System.out.println(BOLD + RED + "⚠ Đã ở trang cuối cùng!" + RESET);
+                        isEdge = true;
+                        continue;
+                    }
+                    break;
+                case "2":
+                    if (currentPage > 1) {
+                        currentPage--;
+                    } else {
+                        System.out.println(BOLD + RED + "⚠ Đã ở trang đầu tiên!" + RESET);
+                        isEdge = true;
+                        continue;
+                    }
+                    break;
+                case "3":
+                    System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages + "): " + RESET);
+                    try {
+                        int selectedPage = Integer.parseInt(scanner.nextLine());
+                        if (selectedPage >= 1 && selectedPage <= totalPages) {
+                            currentPage = selectedPage;
+                        } else {
+                            System.out.println(BOLD + RED + "⚠ Số trang không hợp lệ! Vui lòng chọn từ 1 đến " + totalPages + RESET);
+                            isEdge = true;
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println(BOLD + RED + "⚠ Vui lòng nhập một số hợp lệ!" + RESET);
+                        isEdge = true;
+                    }
+                    break;
+                case "0":
+                    continuePaging = false;
+                    break;
+                default:
+                    System.out.println(BOLD + RED + "⚠ Lựa chọn không hợp lệ!" + RESET);
+                    isEdge = true;
+            }
+
         }
     }
 
@@ -203,7 +275,7 @@ public class StudentUI {
             studentService.cancelEnrollment(studentId, courseId);
             System.out.println(GREEN + "Hủy đăng ký khóa học thành công!" + RESET);
         } catch (Exception e) {
-            System.err.println(RED  + e.getMessage() + RESET);
+            System.out.println(RED  + e.getMessage() + RESET);
         }
     }
 
@@ -211,11 +283,15 @@ public class StudentUI {
     public static void updatePassword(Scanner scanner){
         String studentId = Session.currentStudent.getStudentId();
         String oldPassword = Validator.checkString("→ Nhập mật khẩu cũ: ", scanner, 6, 20);
-
+        boolean isDuplicate = false;
         boolean validPassword =  studentService.checkOldPassword(studentId, oldPassword);
         String newPassword = Validator.checkString("→ Nhập mật khẩu mới: ", scanner, 6, 20);
         String confirmPassword = Validator.checkString("→ Nhập lại mật khẩu mới: ", scanner, 6, 20);
-        if (validPassword) {
+        if (newPassword.equals(oldPassword)){
+            isDuplicate = true;
+            System.out.println(RED + "Mật khẩu mới không được trùng với mật khẩu cũ!" + RESET);
+        }
+        if (validPassword && !isDuplicate) {
             if (newPassword.equals(confirmPassword)) {
                 studentService.updatePassword(studentId, newPassword);
                 System.out.println(GREEN + "Cập nhật mật khẩu thành công!" + RESET);

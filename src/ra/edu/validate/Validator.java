@@ -1,5 +1,7 @@
 package ra.edu.validate;
 
+import ra.edu.business.service.student.StudentService;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -123,6 +125,27 @@ public class Validator {
                 return input;
             } catch (Exception e) {
                 System.out.println("Giá trị nhập ko hợp lệ, hãy lập định dạnh email");
+            }
+        }
+        return "";
+    }
+
+    public static String checkExistEmail(String message, Scanner scanner, StudentService studentService){
+        boolean checkEmail = false;
+        System.out.println(message);
+        while (!checkEmail) {
+            try {
+                String input = scanner.nextLine();
+                if (!input.matches("^[A-Za-z0-9+_.-]+@gmail.com+$")) {
+                    throw new Exception("Giá trị nhập ko hợp lệ, hãy lập định dạnh email");
+                }
+                if (studentService.checkEmailExist(input)) {
+                    throw new Exception("Email đã tồn tại trong hệ thống");
+                }
+                checkEmail = true;
+                return input;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
         return "";
