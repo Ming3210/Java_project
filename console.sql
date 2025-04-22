@@ -901,7 +901,12 @@ select status into status_check
 from enrollment
 where student_id = student_id_in and course_id = course_id_in;
 
-if enrollment_count = 0 then
+if status_check = 'CONFIRM' then
+        signal sqlstate '45000'
+            set message_text = 'Không thể từ chối yêu cầu đã xác nhận.';
+end if;
+
+    if enrollment_count = 0 then
         signal sqlstate '45000'
             set message_text = 'Sinh viên chưa đăng ký khóa học này.';
 else
@@ -911,3 +916,47 @@ where student_id = student_id_in and course_id = course_id_in;
 end if;
 end //
 DELIMITER ;
+
+# drop procedure deniedEnrollment;
+
+
+DELIMITER //
+create procedure statisticCourseByStudent()
+begin
+select course.course_id, course.name, count(enrollment.student_id) as total_students
+from enrollment
+         join course on enrollment.course_id = course.course_id where enrollment.status = 'CONFIRM'
+group by course.course_id;
+end //
+DELIMITER ;
+
+
+DELIMITER //
+create procedure statisticCourseTop5HighestRegisted()
+begin
+select course.name, count(enrollment.student_id) as total_students
+from enrollment
+         join course on enrollment.course_id = course.course_id where enrollment.status = 'CONFIRM'
+group by course.course_id
+order by total_students desc
+    limit 5;
+end //
+DELIMITER ;
+
+# drop procedure statisticCourseTop5HighestRegisted;
+
+
+
+
+DELIMITER //
+create procedure statisticCourseWith10StudentsOrHigher()
+begin
+select course.name, count(enrollment.student_id) as total_students
+from enrollment
+         join course on enrollment.course_id = course.course_id where enrollment.status = 'CONFIRM'
+group by course.course_id
+having total_students >= 10;
+end //
+DELIMITER ;
+
+# drop procedure statisticCourseWith10StudentsOrHigher;
