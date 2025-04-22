@@ -66,8 +66,7 @@ public class StudentUI {
                     break;
                 case 0:
                     System.out.println(RED + "👋 Đăng xuất thành công!" + RESET);
-                    System.exit(0);
-                    break;
+                    return;
                 default:
                     System.out.println(RED + "⚠ Lựa chọn không hợp lệ." + RESET);
             }

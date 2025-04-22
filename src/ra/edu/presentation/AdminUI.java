@@ -8,6 +8,8 @@ import ra.edu.business.service.course.CourseService;
 import ra.edu.business.service.course.CourseServiceImp;
 import ra.edu.business.service.enrollment.EnrollmentService;
 import ra.edu.business.service.enrollment.EnrollmentServiceImp;
+import ra.edu.business.service.statictis.StatictisService;
+import ra.edu.business.service.statictis.StatictisServiceImp;
 import ra.edu.business.service.student.StudentService;
 import ra.edu.business.service.student.StudentServiceImp;
 import ra.edu.validate.CourseValidator;
@@ -17,12 +19,15 @@ import ra.edu.validate.Validator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class AdminUI {
     static CourseService courseService = new CourseServiceImp();
     static StudentService studentService = new StudentServiceImp();
     static EnrollmentService enrollmentService = new EnrollmentServiceImp();
+    static StatictisService statictisService = new StatictisServiceImp();
+
 
     public static final String RESET = "\u001B[0m";
     public static final String RED = "\u001B[31m";
@@ -1071,8 +1076,7 @@ public class AdminUI {
             System.out.println(BOLD + BLUE + "3. Theo ID (tăng dần)" + RESET);
             System.out.println(BOLD + MAGENTA + "4. Theo ID (giảm dần)" + RESET);
             System.out.println(BOLD + RED + "0. Quay lại menu quản lý sinh viên" + RESET);
-            System.out.print(BOLD + WHITE + "Chọn kiểu sắp xếp: " + RESET);
-            int choice = Validator.checkInt("Chọn kiểu sắp xếp: ", scanner);
+            int choice = Validator.checkInt(BOLD + WHITE + "Chọn kiểu sắp xếp: " + RESET, scanner);
 
             switch (choice) {
                 case 1:
@@ -1623,10 +1627,14 @@ public class AdminUI {
         int choice = Validator.checkInt(BOLD + WHITE + "Chọn chức năng: " + RESET, scanner);
         switch (choice) {
             case 1:
-                String courseId = CourseValidator.inputExistingCourseId("Nhập ID khóa học: ", scanner, courseService);
-                String studentId = StudentValidator.inputExistingStudentId("Nhập ID sinh viên: ", scanner, studentService);
-                enrollmentService.deniedEnrollment(studentId,courseId);
-                System.out.println(BOLD + GREEN + "Đã duyệt yêu cầu đăng ký khóa học thành công!" + RESET);
+                try {
+                    String courseId = CourseValidator.inputExistingCourseId("Nhập ID khóa học: ", scanner, courseService);
+                    String studentId = StudentValidator.inputExistingStudentId("Nhập ID sinh viên: ", scanner, studentService);
+                    enrollmentService.deniedEnrollment(studentId,courseId);
+                    System.out.println(BOLD + GREEN + "Đã từ chối yêu cầu đăng ký khóa học thành công!" + RESET);
+                }catch (Exception e){
+                    System.err.println(RED  + e.getMessage() + RESET);
+                }
                 break;
             case 0:
                 return;
@@ -1636,32 +1644,83 @@ public class AdminUI {
     }
 
     public static void showStatisticsMenu(Scanner scanner){
-        System.out.println(BOLD + CYAN + "== THỐNG KÊ KHÓA HỌC ==" + RESET);
-        System.out.println("1. Danh sách sinh viên đăng kí theo từng khóa học");
-        System.out.println("2. Duyệt");
-        int choice = Validator.checkInt("Chọn chức năng: ", scanner);
+        do {
+            System.out.println(BOLD + CYAN + "== THỐNG KÊ KHÓA HỌC ==" + RESET);
+            System.out.println("1. Danh sách sinh viên đăng kí theo từng khóa học");
+            System.out.println("2. Thống kê tổng số học viên theo từng khóa");
+            System.out.println("3. Thống kê top 5 khóa học đông sinh viên nhất");
+            System.out.println("4. Liệt kê các khóa học có trên 10 học viên");
+            System.out.println("0. Quay lại menu chính");
 
-        switch (choice) {
-            case 1:
-//                int totalCourses = courseService.getTotalCourses();
-//                System.out.println("Tổng số khóa học: " + totalCourses);
-                break;
-            case 2:
-//                int totalStudents = studentService.getTotalStudents();
-//                System.out.println("Tổng số sinh viên: " + totalStudents);
-                break;
-            case 3:
-//                int completedCourses = courseService.getCompletedCourses();
-//                System.out.println("Tổng số khóa học đã hoàn thành: " + completedCourses);
-                break;
-            case 4:
-//                int ongoingCourses = courseService.getOngoingCourses();
-//                System.out.println("Tổng số khóa học đang diễn ra: " + ongoingCourses);
-                break;
-            case 0:
-                return;
-            default:
-                System.out.println("Lựa chọn không hợp lệ.");
-        }
+            int choice = Validator.checkInt("Chọn chức năng: ", scanner);
+
+            switch (choice) {
+                case 2:
+
+                    Map<String, Integer> courseStatistics = statictisService.statisticCourseByStudent();
+
+                    System.out.println(BOLD + CYAN + "❯❯❯ THỐNG KÊ KHÓA HỌC ❮❮❮" + RESET);
+                    System.out.println(BOLD + "╔════════════════════════════════╦══════════════════════╗" + RESET);
+                    System.out.println(BOLD + "║   TÊN KHÓA HỌC                 ║    TỔNG SV           ║" + RESET);
+                    System.out.println(BOLD + "╠════════════════════════════════╬══════════════════════╣" + RESET);
+                    for (Map.Entry<String, Integer> entry : courseStatistics.entrySet()) {
+                        System.out.printf(BOLD + "║" + GREEN + " %-30s " + RESET + BOLD +
+                                        "║" + CYAN + " %-18s " + RESET +
+                                        "  ║\n" + RESET,
+                                entry.getKey(),
+                                entry.getValue());
+                    }
+                    System.out.println(BOLD + "╚════════════════════════════════╩══════════════════════╝" + RESET);
+                    break;
+                case 1:
+                    int totalStudents = 0;
+                    int totalCourses = 0;
+                    Map<String, Integer> courseStatistics2 = statictisService.statisticCourseByStudent();
+                    for (Map.Entry<String, Integer> entry : courseStatistics2.entrySet()){
+                        totalStudents +=entry.getValue();
+                        totalCourses += 1;
+                    }
+                    System.out.println(BOLD + BLUE + "TỔNG SỐ SV: " + RESET + totalStudents);
+                    System.out.println(BOLD + BLUE + "TỔNG SỐ KHÓA HỌC: " + RESET + totalCourses);
+                    break;
+                case 3:
+                    Map<String, Integer> courseStatistics3 = statictisService.statisticCourseTop5HighestRegisted();
+
+                    System.out.println(BOLD + CYAN + "❯❯❯ THỐNG KÊ KHÓA HỌC ❮❮❮" + RESET);
+                    System.out.println(BOLD + "╔════════════════════════════════╦══════════════════════╗" + RESET);
+                    System.out.println(BOLD + "║   TÊN KHÓA HỌC                 ║    TỔNG SV           ║" + RESET);
+                    System.out.println(BOLD + "╠════════════════════════════════╬══════════════════════╣" + RESET);
+                    for (Map.Entry<String, Integer> entry : courseStatistics3.entrySet()) {
+                        System.out.printf(BOLD + "║" + GREEN + " %-30s " + RESET + BOLD +
+                                        "║" + CYAN + " %-18s " + RESET +
+                                        "  ║\n" + RESET,
+                                entry.getKey(),
+                                entry.getValue());
+                    }
+                    System.out.println(BOLD + "╚════════════════════════════════╩══════════════════════╝" + RESET);
+                    break;
+                case 4:
+                    Map<String, Integer> courseStatistics4 = statictisService.statisticCourseWith10StudentsOrHigher();
+                    System.out.println(BOLD + CYAN + "❯❯❯ THỐNG KÊ KHÓA HỌC ❮❮❮" + RESET);
+                    System.out.println(BOLD + "╔════════════════════════════════╦══════════════════════╗" + RESET);
+                    System.out.println(BOLD + "║   TÊN KHÓA HỌC                 ║    TỔNG SV           ║" + RESET);
+                    System.out.println(BOLD + "╠════════════════════════════════╬══════════════════════╣" + RESET);
+                    for (Map.Entry<String, Integer> entry : courseStatistics4.entrySet()) {
+                        System.out.printf(BOLD + "║" + GREEN + " %-30s " + RESET + BOLD +
+                                        "║" + CYAN + " %-18s " + RESET +
+                                        "  ║\n" + RESET,
+                                entry.getKey(),
+                                entry.getValue());
+                    }
+                    System.out.println(BOLD + "╚════════════════════════════════╩══════════════════════╝" + RESET);
+
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Lựa chọn không hợp lệ.");
+            }
+        }while (true);
     }
+
 }

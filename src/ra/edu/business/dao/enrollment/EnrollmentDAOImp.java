@@ -113,7 +113,7 @@ public class EnrollmentDAOImp implements EnrollmentDAO {
             callSt.setString(2, courseId);
             callSt.execute();
         } catch (Exception e) {
-            System.err.println("Error denying enrollment: " + e.getMessage());
+            throw new RuntimeException("Lỗi: " + e.getMessage());
         } finally {
             ConnectionDB.closeConnection(conn, callSt);
         }
