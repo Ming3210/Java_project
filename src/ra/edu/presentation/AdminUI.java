@@ -244,12 +244,11 @@ public class AdminUI {
                         System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET +  "                      " + BOLD + PURPLE + " │" + RESET);
                         System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu sắp xếp" + RESET +  "           " + BOLD + PURPLE + " │" + RESET);
                         System.out.println(BOLD + PURPLE + "└─────────────────────────────────────┘" + RESET);
-                        System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
-                        String paginationChoice = scanner.nextLine();
+                        int paginationChoice = Validator.checkInt(BOLD + WHITE + "Chọn chức năng: " + RESET, scanner);
                         isEdge = false;
 
                         switch (paginationChoice) {
-                            case "1":
+                            case 1:
                                 if (currentPage < totalPages) {
                                     currentPage++;
                                 } else {
@@ -258,7 +257,7 @@ public class AdminUI {
                                     continue;
                                 }
                                 break;
-                            case "2":
+                            case 2:
                                 if (currentPage > 1) {
                                     currentPage--;
                                 } else {
@@ -267,7 +266,7 @@ public class AdminUI {
                                     continue;
                                 }
                                 break;
-                            case "3":
+                            case 3:
                                 System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages + "): " + RESET);
                                 try {
                                     int selectedPage = Integer.parseInt(scanner.nextLine());
@@ -282,7 +281,7 @@ public class AdminUI {
                                     isEdge = true;
                                 }
                                 break;
-                            case "0":
+                            case 0:
                                 continuePaging = false;
                                 break;
                             default:
@@ -328,12 +327,11 @@ public class AdminUI {
                         System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET + "                      " + BOLD + PURPLE + " │" + RESET);
                         System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu sắp xếp" + RESET + "           " + BOLD + PURPLE + " │" + RESET);
                         System.out.println(BOLD + PURPLE + "└─────────────────────────────────────┘" + RESET);
-                        System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
-                        String paginationChoice = scanner.nextLine();
+                        int paginationChoice = Validator.checkInt(BOLD + WHITE + "Chọn chức năng: " + RESET, scanner);
                         isEdge2 = false;
 
                         switch (paginationChoice) {
-                            case "1":
+                            case 1:
                                 if (currentPage2 < totalPages2) {
                                     currentPage2++;
                                 } else {
@@ -342,7 +340,7 @@ public class AdminUI {
                                     continue;
                                 }
                                 break;
-                            case "2":
+                            case 2:
                                 if (currentPage2 > 1) {
                                     currentPage2--;
                                 } else {
@@ -351,7 +349,7 @@ public class AdminUI {
                                     continue;
                                 }
                                 break;
-                            case "3":
+                            case 3:
                                 System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages2 + "): " + RESET);
                                 try {
                                     int selectedPage = Integer.parseInt(scanner.nextLine());
@@ -366,7 +364,7 @@ public class AdminUI {
                                     isEdge2 = true;
                                 }
                                 break;
-                            case "0":
+                            case 0:
                                 continuePaging2 = false;
                                 break;
                             default:
@@ -412,12 +410,11 @@ public class AdminUI {
                         System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET + "                      " + BOLD + PURPLE + " │" + RESET);
                         System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu sắp xếp" + RESET + "           " + BOLD + PURPLE + " │" + RESET);
                         System.out.println(BOLD + PURPLE + "└─────────────────────────────────────┘" + RESET);
-                        System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
-                        String paginationChoice = scanner.nextLine();
+                        int paginationChoice = Validator.checkInt(BOLD + WHITE + "Chọn chức năng: " + RESET, scanner);
                         isEdge3 = false;
 
                         switch (paginationChoice) {
-                            case "1":
+                            case 1:
                                 if (currentPage3 < totalPages3) {
                                     currentPage3++;
                                 } else {
@@ -426,7 +423,7 @@ public class AdminUI {
                                     continue;
                                 }
                                 break;
-                            case "2":
+                            case 2:
                                 if (currentPage3 > 1) {
                                     currentPage3--;
                                 } else {
@@ -435,7 +432,7 @@ public class AdminUI {
                                     continue;
                                 }
                                 break;
-                            case "3":
+                            case 3:
                                 System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages3 + "): " + RESET);
                                 try {
                                     int selectedPage = Integer.parseInt(scanner.nextLine());
@@ -450,7 +447,7 @@ public class AdminUI {
                                     isEdge3 = true;
                                 }
                                 break;
-                            case "0":
+                            case 0:
                                 continuePaging3 = false;
                                 break;
                             default:
@@ -496,12 +493,11 @@ public class AdminUI {
                         System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET + "                      " + BOLD + PURPLE + " │" + RESET);
                         System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu sắp xếp" + RESET + "           " + BOLD + PURPLE + " │" + RESET);
                         System.out.println(BOLD + PURPLE + "└─────────────────────────────────────┘" + RESET);
-                        System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
-                        String paginationChoice = scanner.nextLine();
+                        int paginationChoice = Validator.checkInt(BOLD + WHITE + "Chọn chức năng: " + RESET, scanner);
                         isEdge4 = false;
 
                         switch (paginationChoice) {
-                            case "1":
+                            case 1:
                                 if (currentPage4 < totalPages4) {
                                     currentPage4++;
                                 } else {
@@ -510,7 +506,7 @@ public class AdminUI {
                                     continue;
                                 }
                                 break;
-                            case "2":
+                            case 2:
                                 if (currentPage4 > 1) {
                                     currentPage4--;
                                 } else {
@@ -519,7 +515,7 @@ public class AdminUI {
                                     continue;
                                 }
                                 break;
-                            case "3":
+                            case 3:
                                 System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages4 + "): " + RESET);
                                 try {
                                     int selectedPage = Integer.parseInt(scanner.nextLine());
@@ -534,7 +530,7 @@ public class AdminUI {
                                     isEdge4 = true;
                                 }
                                 break;
-                            case "0":
+                            case 0:
                                 continuePaging4 = false;
                                 break;
                             default:
@@ -578,20 +574,19 @@ public class AdminUI {
             System.out.println("3. Sửa tên giảng viên");
             System.out.println("4. Lưu thay đổi");
             System.out.println("0. Hủy và quay lại");
-            System.out.print("Chọn thuộc tính cần sửa: ");
-            String choice = scanner.nextLine();
+            int choice = Validator.checkInt(MAGENTA + "Chọn thuộc tính cần sửa: " +RESET,scanner);
 
             switch (choice) {
-                case "1":
+                case 1:
                     course.setCourseName(Validator.checkString("Nhập tên mới: ",scanner, 5, 100));
                     break;
-                case "2":
+                case 2:
                     course.setDuration((Validator.checkInt("Nhập thời lượng mới: ",scanner)));
                     break;
-                case "3":
+                case 3:
                     course.setInstructor(Validator.checkString("Nhập tên giảng viên mới: ", scanner, 5, 100));
                     break;
-                case "4":
+                case 4:
                     boolean checkConfirm = Validator.checkBoolean("Bạn có chắc chắn muốn lưu thay đổi không? (true/false): ", scanner);
                     if (checkConfirm) {
                         try {
@@ -604,7 +599,7 @@ public class AdminUI {
                         System.out.println("Hủy cập nhật khóa học.");
                     }
                     return;
-                case "0":
+                case 0:
                     System.out.println("Hủy chỉnh sửa.");
                     return;
                 default:
@@ -656,12 +651,11 @@ public class AdminUI {
             System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET + "                         " + BOLD + PURPLE + " │" + RESET);
             System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu quản lý khóa học" + RESET + "    " + BOLD + PURPLE + "  │" + RESET);
             System.out.println(BOLD + PURPLE + "└────────────────────────────────────────┘" + RESET);
-            System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
-            String paginationChoice = scanner.nextLine();
+            int paginationChoice = Validator.checkInt(BOLD + WHITE + "Chọn chức năng: " + RESET,scanner);
             isEdge = false;
 
             switch (paginationChoice) {
-                case "1":
+                case 1:
                     if (currentPage < totalPages) {
                         currentPage++;
                     } else {
@@ -670,7 +664,7 @@ public class AdminUI {
                         continue;
                     }
                     break;
-                case "2":
+                case 2:
                     if (currentPage > 1) {
                         currentPage--;
                     } else {
@@ -679,7 +673,7 @@ public class AdminUI {
                         continue;
                     }
                     break;
-                case "3":
+                case 3:
                     System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages + "): " + RESET);
                     try {
                         int selectedPage = Integer.parseInt(scanner.nextLine());
@@ -694,7 +688,7 @@ public class AdminUI {
                         isEdge = true;
                     }
                     break;
-                case "0":
+                case 0:
                     continuePaging = false;
                     break;
                 default:
@@ -739,18 +733,17 @@ public class AdminUI {
                 }
             }
 
-            System.out.println(BOLD + PURPLE + "\n┌─────────── ĐIỀU HƯỚNG ──────────────┐" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + GREEN + "1. Tiếp theo" + RESET +   "                      " + BOLD + PURPLE + "  │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + BLUE + "2. Quay lại" + RESET +   "                       " + BOLD + PURPLE + "  │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET +   "                      " + BOLD + PURPLE + " │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu quản lý khóa học" + RESET +  "  " + BOLD + PURPLE + " │" + RESET);
-            System.out.println(BOLD + PURPLE + "└─────────────────────────────────────┘" + RESET);
-            System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
-            String paginationChoice = scanner.nextLine();
+            System.out.println(BOLD + PURPLE + "\n┌─────────── ĐIỀU HƯỚNG ─────────────────┐" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + GREEN + "1. Tiếp theo" + RESET + "                         " + BOLD + PURPLE + "  │" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + BLUE + "2. Quay lại" + RESET + "                          " + BOLD + PURPLE + "  │" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET + "                         " + BOLD + PURPLE + " │" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu quản lý khóa học" + RESET + "    " + BOLD + PURPLE + "  │" + RESET);
+            System.out.println(BOLD + PURPLE + "└────────────────────────────────────────┘" + RESET);
+            int paginationChoice = Validator.checkInt(BOLD + WHITE + "Chọn chức năng: " + RESET,scanner);
             isEdge = false;
 
             switch (paginationChoice) {
-                case "1":
+                case 1:
                     if (currentPage < totalPages) {
                         currentPage++;
                     } else {
@@ -759,7 +752,7 @@ public class AdminUI {
                         continue;
                     }
                     break;
-                case "2":
+                case 2:
                     if (currentPage > 1) {
                         currentPage--;
                     } else {
@@ -768,7 +761,7 @@ public class AdminUI {
                         continue;
                     }
                     break;
-                case "3":
+                case 3:
                     System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages + "): " + RESET);
                     try {
                         int selectedPage = Integer.parseInt(scanner.nextLine());
@@ -783,7 +776,7 @@ public class AdminUI {
                         isEdge = true;
                     }
                     break;
-                case "0":
+                case 0:
                     continuePaging = false;
                     break;
                 default:
@@ -865,18 +858,17 @@ public class AdminUI {
                 }
             }
 
-            System.out.println(BOLD + PURPLE + "\n┌─────────── ĐIỀU HƯỚNG ──────────────┐" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + GREEN + "1. Tiếp theo" + RESET + "                      " + BOLD + PURPLE + "  │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + BLUE + "2. Quay lại" + RESET + "                       " + BOLD + PURPLE + "  │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET + "                      " + BOLD + PURPLE + " │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu quản lý sinh viên" + RESET + "  " + BOLD + PURPLE + " │" + RESET);
-            System.out.println(BOLD + PURPLE + "└─────────────────────────────────────┘" + RESET);
-            System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
-            String paginationChoice = scanner.nextLine();
+            System.out.println(BOLD + PURPLE + "\n┌─────────── ĐIỀU HƯỚNG ─────────────────┐" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + GREEN + "1. Tiếp theo" + RESET + "                         " + BOLD + PURPLE + "  │" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + BLUE + "2. Quay lại" + RESET + "                          " + BOLD + PURPLE + "  │" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET + "                         " + BOLD + PURPLE + " │" + RESET);
+            System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu quản lý khóa học" + RESET + "    " + BOLD + PURPLE + "  │" + RESET);
+            System.out.println(BOLD + PURPLE + "└────────────────────────────────────────┘" + RESET);
+            int paginationChoice = Validator.checkInt(BOLD + WHITE + "Chọn chức năng: " + RESET,scanner);
             isEdge = false;
 
             switch (paginationChoice) {
-                case "1":
+                case 1:
                     if (currentPage < totalPages) {
                         currentPage++;
                     } else {
@@ -885,7 +877,7 @@ public class AdminUI {
                         continue;
                     }
                     break;
-                case "2":
+                case 2:
                     if (currentPage > 1) {
                         currentPage--;
                     } else {
@@ -894,7 +886,7 @@ public class AdminUI {
                         continue;
                     }
                     break;
-                case "3":
+                case 3:
                     System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages + "): " + RESET);
                     try {
                         int selectedPage = Integer.parseInt(scanner.nextLine());
@@ -909,7 +901,7 @@ public class AdminUI {
                         isEdge = true;
                     }
                     break;
-                case "0":
+                case 0:
                     continuePaging = false;
                     break;
                 default:
@@ -917,7 +909,6 @@ public class AdminUI {
                     isEdge = true;
             }
         }
-        return;
     }
 
     public static void addStudent(Scanner scanner) {
@@ -1109,18 +1100,17 @@ public class AdminUI {
                             }
                         }
 
-                        System.out.println(BOLD + PURPLE + "\n┌─────────── ĐIỀU HƯỚNG ──────────────┐" + RESET);
-                        System.out.println(BOLD + PURPLE + "│" + RESET + " " + GREEN + "1. Tiếp theo" + RESET + "                      " + BOLD + PURPLE + "  │" + RESET);
-                        System.out.println(BOLD + PURPLE + "│" + RESET + " " + BLUE + "2. Quay lại" + RESET + "                       " + BOLD + PURPLE + "  │" + RESET);
-                        System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET + "                      " + BOLD + PURPLE + " │" + RESET);
-                        System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu sắp xếp" + RESET + "           " + BOLD + PURPLE + " │" + RESET);
-                        System.out.println(BOLD + PURPLE + "└─────────────────────────────────────┘" + RESET);
-                        System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
-                        String paginationChoice = scanner.nextLine();
+                        System.out.println(BOLD + PURPLE + "\n┌─────────── ĐIỀU HƯỚNG ─────────────────┐" + RESET);
+                        System.out.println(BOLD + PURPLE + "│" + RESET + " " + GREEN + "1. Tiếp theo" + RESET + "                         " + BOLD + PURPLE + "  │" + RESET);
+                        System.out.println(BOLD + PURPLE + "│" + RESET + " " + BLUE + "2. Quay lại" + RESET + "                          " + BOLD + PURPLE + "  │" + RESET);
+                        System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET + "                         " + BOLD + PURPLE + " │" + RESET);
+                        System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu quản lý khóa học" + RESET + "    " + BOLD + PURPLE + "  │" + RESET);
+                        System.out.println(BOLD + PURPLE + "└────────────────────────────────────────┘" + RESET);
+                        int paginationChoice = Validator.checkInt(BOLD + WHITE + "Chọn chức năng: " + RESET,scanner);
                         isEdge = false;
 
                         switch (paginationChoice) {
-                            case "1":
+                            case 1:
                                 if (currentPage < totalPages) {
                                     currentPage++;
                                 } else {
@@ -1129,7 +1119,7 @@ public class AdminUI {
                                     continue;
                                 }
                                 break;
-                            case "2":
+                            case 2:
                                 if (currentPage > 1) {
                                     currentPage--;
                                 } else {
@@ -1138,7 +1128,7 @@ public class AdminUI {
                                     continue;
                                 }
                                 break;
-                            case "3":
+                            case 3:
                                 System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages + "): " + RESET);
                                 try {
                                     int selectedPage = Integer.parseInt(scanner.nextLine());
@@ -1153,7 +1143,7 @@ public class AdminUI {
                                     isEdge = true;
                                 }
                                 break;
-                            case "0":
+                            case 0:
                                 continuePaging = false;
                                 break;
                             default:
