@@ -134,7 +134,7 @@ public class Validator {
 
                 String input = scanner.nextLine();
                 if (input.trim().isEmpty()) {
-                    throw new Exception("Email không được để trống.");
+                    throw new Exception(RED+"Email không được để trống."+RESET);
                 }
                 if (!input.matches("^[A-Za-z0-9+_.-]+@gmail.com+$")) {
                     throw new Exception("Giá trị nhập ko hợp lệ, hãy lập định dạnh email");

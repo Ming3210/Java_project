@@ -42,10 +42,10 @@ public class StudentServiceImp implements StudentService{
         return studentDAO.checkEmailExist(email);
     }
 
-//    @Override
-//    public void updateStudent(Student student) {
-//        studentDAO.updateStudent(student);
-//    }
+    @Override
+    public void updateStudent(Student student) {
+        studentDAO.updateStudent(student);
+    }
 
     @Override
     public void deleteStudent(String studentId) {

@@ -6,6 +6,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class StatictisDAOImp implements StatictisDAO{
@@ -13,7 +14,7 @@ public class StatictisDAOImp implements StatictisDAO{
     public Map<String, Integer> statisticCourseByStudent() {
         Connection conn = null;
         CallableStatement callSt = null;
-        Map<String, Integer> result = new HashMap<>();
+        Map<String, Integer> result = new LinkedHashMap<>();
         ResultSet rs = null;
         try {
             conn = ConnectionDB.openConnection();
@@ -40,7 +41,7 @@ public class StatictisDAOImp implements StatictisDAO{
     public Map<String, Integer> statisticCourseTop5HighestRegisted() {
         Connection conn = null;
         CallableStatement callSt = null;
-        Map<String, Integer> result = new HashMap<>();
+        Map<String, Integer> result = new LinkedHashMap<>();
         ResultSet rs = null;
         try {
             conn = ConnectionDB.openConnection();
@@ -67,7 +68,7 @@ public class StatictisDAOImp implements StatictisDAO{
     public Map<String, Integer> statisticCourseWith10StudentsOrHigher() {
         Connection conn = null;
         CallableStatement callSt = null;
-        Map<String, Integer> result = new HashMap<>();
+        Map<String, Integer> result = new LinkedHashMap<>();
         ResultSet rs = null;
         try {
             conn = ConnectionDB.openConnection();

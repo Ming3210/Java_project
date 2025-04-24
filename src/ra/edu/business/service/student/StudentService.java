@@ -12,7 +12,7 @@ public interface StudentService {
     void addStudent(Student student);
     boolean isStudentIdExists(String studentId);
     boolean checkEmailExist(String email);
-    //    void updateStudent(Student student);
+    void updateStudent(Student student);
     void deleteStudent(String studentId);
     List<Student> searchStudents(String searchTerm, int page);
     int getSearchStudentsByPage(String searchName);

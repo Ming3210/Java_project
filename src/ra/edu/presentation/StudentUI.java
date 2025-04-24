@@ -281,22 +281,34 @@ public class StudentUI {
 
     public static void updatePassword(Scanner scanner){
         String studentId = Session.currentStudent.getStudentId();
+        String email = Validator.checkEmail(PURPLE+"→ Nhập email: "+RESET, scanner);
+        while (!email.equalsIgnoreCase(Session.currentStudent.getEmail())){
+            System.out.println(RED + "Email không đúng!" + RESET);
+            email = Validator.checkEmail(PURPLE+"→ Nhập email: "+RESET, scanner);
+        }
         String oldPassword = Validator.checkString("→ Nhập mật khẩu cũ: ", scanner, 6, 20);
         boolean isDuplicate = false;
         boolean validPassword =  studentService.checkOldPassword(studentId, oldPassword);
-        String newPassword = Validator.checkString("→ Nhập mật khẩu mới: ", scanner, 6, 20);
-        String confirmPassword = Validator.checkString("→ Nhập lại mật khẩu mới: ", scanner, 6, 20);
-        if (newPassword.equals(oldPassword)){
-            isDuplicate = true;
-            System.out.println(RED + "Mật khẩu mới không được trùng với mật khẩu cũ!" + RESET);
+        while (!validPassword){
+            oldPassword = Validator.checkString("→ Nhập mật khẩu cũ: ", scanner, 6, 20);
+            validPassword = studentService.checkOldPassword(studentId, oldPassword);
         }
-        if (validPassword && !isDuplicate) {
-            if (newPassword.equals(confirmPassword)) {
-                studentService.updatePassword(studentId, newPassword);
-                System.out.println(GREEN + "Cập nhật mật khẩu thành công!" + RESET);
-            } else {
-                System.out.println(RED + "Mật khẩu xác nhận không khớp!" + RESET);
+        String newPassword = Validator.checkString("→ Nhập mật khẩu mới: ", scanner, 6, 20);
+        while (!isDuplicate){
+            if(newPassword.equals(oldPassword)){
+                isDuplicate = true;
             }
+            System.out.println(RED + "Mật khẩu mới không được trùng với mật khẩu cũ!" + RESET);
+            newPassword = Validator.checkString("→ Nhập mật khẩu mới: ", scanner, 6, 20);
+
+        }
+        String confirmPassword = Validator.checkString("→ Nhập lại mật khẩu mới: ", scanner, 6, 20);
+
+        if (newPassword.equals(confirmPassword)) {
+            studentService.updatePassword(studentId, newPassword);
+            System.out.println(GREEN + "Cập nhật mật khẩu thành công!" + RESET);
+        } else {
+            System.out.println(RED + "Mật khẩu xác nhận không khớp!" + RESET);
         }
 
 

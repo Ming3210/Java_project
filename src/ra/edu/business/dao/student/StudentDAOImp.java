@@ -136,34 +136,34 @@ public class StudentDAOImp implements StudentDAO{
         return exists;
     }
 
-//    @Override
-//    public void updateStudent(Student student) {
-//        Connection conn = null;
-//        CallableStatement callSt = null;
-//
-//        try {
-//            conn = ConnectionDB.openConnection();
-//            callSt = conn.prepareCall("{CALL updateStudent(?, ?, ?, ?, ?, ?)}");
-//
-//            callSt.setString(1, student.getStudentId());
-//            callSt.setString(2, student.getName());
-//            callSt.setDate(3, Date.valueOf(student.getDob()));
-//            callSt.setString(4, student.getEmail());
-//            callSt.setBoolean(5, student.isGender());
-//            callSt.setString(6, student.getPhone());
-//
-//            int rowsAffected = callSt.executeUpdate();
-//            if (rowsAffected > 0) {
-//                System.out.println("Cập nhật sinh viên thành công!");
-//            } else {
-//                System.out.println("Không tìm thấy sinh viên với ID: " + student.getStudentId());
-//            }
-//        } catch (SQLException e) {
-//            System.err.println("Lỗi khi cập nhật sinh viên: " + e.getMessage());
-//        } finally {
-//            ConnectionDB.closeConnection(conn, callSt);
-//        }
-//    }
+    @Override
+    public void updateStudent(Student student) {
+        Connection conn = null;
+        CallableStatement callSt = null;
+
+        try {
+            conn = ConnectionDB.openConnection();
+            callSt = conn.prepareCall("{CALL updateStudent(?, ?, ?, ?, ?, ?)}");
+
+            callSt.setString(1, student.getStudentId());
+            callSt.setString(2, student.getName());
+            callSt.setDate(3, Date.valueOf(student.getDob()));
+            callSt.setString(4, student.getEmail());
+            callSt.setBoolean(5, student.isGender());
+            callSt.setString(6, student.getPhone());
+
+            int rowsAffected = callSt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Cập nhật sinh viên thành công!");
+            } else {
+                System.out.println("Không tìm thấy sinh viên với ID: " + student.getStudentId());
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi cập nhật sinh viên: " + e.getMessage());
+        } finally {
+            ConnectionDB.closeConnection(conn, callSt);
+        }
+    }
 
     @Override
     public void deleteStudent(String studentId) {
@@ -176,13 +176,12 @@ public class StudentDAOImp implements StudentDAO{
             callSt.setString(1, studentId);
             callSt.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Lỗi khi xoá sinh viên: " + e.getMessage());
+            throw new RuntimeException(e);
+
         } finally {
             ConnectionDB.closeConnection(conn, callSt);
         }
     }
-
-
 
 
     @Override
@@ -450,7 +449,6 @@ public class StudentDAOImp implements StudentDAO{
                 else {
                     isCorrect = false;
                 }
-
             }
         } catch (SQLException e) {
             System.err.println("Lỗi khi kiểm tra mật khẩu cũ: " + e.getMessage());
