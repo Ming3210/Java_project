@@ -28,6 +28,7 @@ CREATE TABLE course(
                        duration INT NOT NULL,
                        instructor VARCHAR(100) NOT NULL,
                        create_at DATE DEFAULT(CURRENT_DATE)
+                           #        course_status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE'
 );
 
 CREATE TABLE enrollment (
@@ -178,9 +179,12 @@ BEGIN
 
 SELECT *
 FROM course
-         LIMIT 5 OFFSET offset_value;
+         #     where course_status = 'ACTIVE'
+    LIMIT 5 OFFSET offset_value;
 END //
 DELIMITER ;
+
+# drop procedure get_courses_by_page;
 
 DELIMITER //
 CREATE PROCEDURE CheckCourseIdExists(
@@ -203,6 +207,27 @@ END //
 DELIMITER ;
 
 DELIMITER //
+CREATE PROCEDURE CheckCourseNameExists(
+    IN course_name_in VARCHAR(50),
+    OUT exists_flag BOOLEAN
+)
+BEGIN
+    DECLARE count_val INT;
+
+SELECT COUNT(*) INTO count_val
+FROM course
+WHERE course.name = course_name_in;
+
+IF count_val > 0 THEN
+        SET exists_flag = TRUE;
+ELSE
+        SET exists_flag = FALSE;
+END IF;
+END //
+DELIMITER ;
+
+
+DELIMITER //
 CREATE PROCEDURE add_course(
     course_id_in CHAR(5),
     name_in VARCHAR(100),
@@ -216,7 +241,10 @@ END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE GetCourseById(IN p_course_id CHAR(5))
+CREATE PROCEDURE GetCourseById(
+    p_course_id CHAR(5)
+
+)
 BEGIN
 SELECT course_id, name, duration, instructor, create_at
 FROM course
@@ -263,7 +291,34 @@ END IF;
 END //
 DELIMITER ;
 
-# drop procedure DeleteCourse;
+# DELIMITER //
+# create procedure DeleteCourseSort(
+    #     course_id_in CHAR(5)
+        # )
+    # begin
+#     declare  course_exists int;
+#     declare check_status char(10);
+#     select count(*) into course_exists
+    #     from course where course_id = course_id_in;
+#
+#     select c.course_status into check_status from course c
+    #     where c.course_id = course_id_in;
+#
+#     if course_exists = 0 then
+#         signal sqlstate '45000'
+#             set message_text = 'Khóa học không tồn tại.';
+#     elseif check_status = 'INACTIVE' then
+#         signal sqlstate '45000'
+#             set message_text = 'Đã xóa khóa học';
+#     else
+#         update course set course_status = 'INACTIVE'
+    #         where course_id = course_id_in;
+#     end if;
+#
+# end //
+# DELIMITER ;
+
+# drop procedure DeleteCourseSort;
 
 DELIMITER //
 CREATE PROCEDURE GetTotalSearchCoursePages(
@@ -456,14 +511,20 @@ CREATE PROCEDURE deleteStudent(
     IN p_student_id CHAR(5)
 )
 BEGIN
-    -- Xoá tài khoản trước (nếu có liên kết foreign key)
 DELETE FROM account WHERE student_id = p_student_id;
 
--- Sau đó xoá sinh viên
-DELETE FROM student WHERE student_id = p_student_id;
+if p_student_id in (SELECT student_id FROM enrollment)
+    then
+        signal sqlstate '45000'
+            set message_text = 'Sinh viên này đã đăng kí khóa học';
+else
+DELETE FROM enrollment WHERE student_id = p_student_id;
+end if;
+
 END //
 DELIMITER ;
 
+# drop procedure deleteStudent;
 
 
 DELIMITER //
@@ -673,7 +734,8 @@ if enrollment_count = 0 then
         signal sqlstate '45000'
             set message_text = 'Không thể hủy đăng ký khóa học đã xác nhận.';
 else
-delete from enrollment
+update enrollment
+set status = 'CANCEL'
 where student_id = student_id_in and course_id = course_id_in;
 end if;
 end //;
@@ -806,7 +868,7 @@ BEGIN
 SELECT s.student_id, s.dob, s.name, s.phone, s.email
 FROM student s
          JOIN enrollment e ON s.student_id = e.student_id
-WHERE e.course_id = course_id_in;
+WHERE e.course_id = course_id_in AND e.status != 'DENIED';
 END //
 DELIMITER ;
 
