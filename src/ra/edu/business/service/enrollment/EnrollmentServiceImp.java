@@ -35,4 +35,9 @@ public class EnrollmentServiceImp implements EnrollmentService{
     public void deniedEnrollment(String studentId, String courseId) {
         enrollmentDAO.deniedEnrollment(studentId, courseId);
     }
+
+    @Override
+    public List<RegisteredEnrollmentDTO> sortRegistedEnrollmentByCondition(String studentId, String condition, String sortType, int page) {
+        return enrollmentDAO.sortRegistedEnrollmentByCondition(studentId, condition, sortType, page);
+    }
 }

@@ -1,10 +1,30 @@
 package ra.edu.business.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class RegisteredEnrollmentDTO {
     private String courseId;
     private String courseName;
     private String status;
     private String studentId;
+    private LocalDateTime createdAt;
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public RegisteredEnrollmentDTO(String courseId, String courseName, LocalDateTime createdAt, String status, String studentId) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.createdAt = createdAt;
+        this.status = status;
+        this.studentId = studentId;
+    }
 
     public RegisteredEnrollmentDTO(String courseId, String courseName, String status, String studentId) {
         this.courseId = courseId;

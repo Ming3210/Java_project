@@ -10,5 +10,6 @@ public interface EnrollmentService {
     List<RegisteredEnrollmentDTO> getAllWaitingStatusEnrollment();
     void approveEnrollment(String studentId, String courseId);
     void deniedEnrollment(String studentId, String courseId);
+    List<RegisteredEnrollmentDTO> sortRegistedEnrollmentByCondition(String studentId, String condition, String sortType, int page);
 
 }

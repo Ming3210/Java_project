@@ -119,4 +119,43 @@ public class EnrollmentDAOImp implements EnrollmentDAO {
         }
     }
 
+    @Override
+    public List<RegisteredEnrollmentDTO> sortRegistedEnrollmentByCondition(String studentId, String condition, String sortType, int page) {
+        Connection conn = null;
+        CallableStatement callSt = null;
+        ResultSet rs = null;
+        List<RegisteredEnrollmentDTO> registeredCourseList = new ArrayList<>();
+        try {
+            conn = ConnectionDB.openConnection();
+            callSt = conn.prepareCall("{CALL sortRegistedEnrollmentByCondition(?, ?, ?, ?)}");
+            callSt.setString(1, studentId);
+            callSt.setString(2, condition);
+            callSt.setString(3, sortType);
+            callSt.setInt(4, page);
+            boolean hasResults = callSt.execute();
+            if (hasResults) {
+                rs = callSt.getResultSet();
+                while (rs.next()) {
+                    RegisteredEnrollmentDTO registeredCourse = new RegisteredEnrollmentDTO();
+                    registeredCourse.setStudentId(rs.getString("student_id"));
+                    registeredCourse.setCourseId(rs.getString("course_id"));
+                    registeredCourse.setCourseName(rs.getString("name"));
+                    registeredCourse.setStatus(rs.getString("status"));
+                    registeredCourse.setCreatedAt(rs.getTimestamp("registered_at").toLocalDateTime());
+                    registeredCourseList.add(registeredCourse);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error sorting registered enrollment by condition: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.err.println("Error closing result set: " + e.getMessage());
+            }
+            ConnectionDB.closeConnection(conn, callSt);
+        }
+        return registeredCourseList;
+    }
+
 }
