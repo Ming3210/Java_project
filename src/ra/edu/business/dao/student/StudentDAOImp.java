@@ -1,8 +1,7 @@
 package ra.edu.business.dao.student;
 
 import ra.edu.business.config.ConnectionDB;
-import ra.edu.business.model.Course;
-import ra.edu.business.model.RegisteredCourseDTO;
+import ra.edu.business.model.RegisteredEnrollmentDTO;
 import ra.edu.business.model.Student;
 
 import java.sql.*;
@@ -369,7 +368,6 @@ public class StudentDAOImp implements StudentDAO{
     @Override
     public void registerEnrollment(String studentId, String courseId) {
         Connection conn = null;
-        System.out.println("studentId: " + studentId);
         CallableStatement callSt = null;
         ResultSet rs = null;
         try {
@@ -386,8 +384,8 @@ public class StudentDAOImp implements StudentDAO{
     }
 
     @Override
-    public List<RegisteredCourseDTO> showAllRegistedEnrollment(String studentId) {
-        List<RegisteredCourseDTO> registeredCourseDTOs = new ArrayList<>();
+    public List<RegisteredEnrollmentDTO> showAllRegistedEnrollment(String studentId) {
+        List<RegisteredEnrollmentDTO> registeredCourseDTOs = new ArrayList<>();
         Connection conn = null;
         CallableStatement callSt = null;
         ResultSet rs = null;
@@ -397,7 +395,7 @@ public class StudentDAOImp implements StudentDAO{
             callSt.setString(1, studentId);
             rs = callSt.executeQuery();
             while (rs.next()) {
-                RegisteredCourseDTO registeredCourseDTO = new RegisteredCourseDTO();
+                RegisteredEnrollmentDTO registeredCourseDTO = new RegisteredEnrollmentDTO();
                 registeredCourseDTO.setCourseId(rs.getString("course_id"));
                 registeredCourseDTO.setCourseName(rs.getString("name"));
                 registeredCourseDTO.setStatus(rs.getString("status"));
@@ -498,11 +496,11 @@ public class StudentDAOImp implements StudentDAO{
     }
 
     @Override
-    public List<RegisteredCourseDTO> getRegistedEnrollmentByPage(String studentId, int page) {
+    public List<RegisteredEnrollmentDTO> getRegistedEnrollmentByPage(String studentId, int page) {
         Connection conn = null;
         CallableStatement callSt = null;
         ResultSet rs = null;
-        List<RegisteredCourseDTO> registeredCourseDTOs = new ArrayList<>();
+        List<RegisteredEnrollmentDTO> registeredCourseDTOs = new ArrayList<>();
         try {
             conn = ConnectionDB.openConnection();
             callSt = conn.prepareCall("{CALL getRegistedEnrollmentByPage(?, ?)}");
@@ -510,7 +508,7 @@ public class StudentDAOImp implements StudentDAO{
             callSt.setInt(2, page);
             rs = callSt.executeQuery();
             while (rs.next()) {
-                RegisteredCourseDTO registeredCourseDTO = new RegisteredCourseDTO();
+                RegisteredEnrollmentDTO registeredCourseDTO = new RegisteredEnrollmentDTO();
                 registeredCourseDTO.setCourseId(rs.getString("course_id"));
                 registeredCourseDTO.setCourseName(rs.getString("name"));
                 registeredCourseDTO.setStatus(rs.getString("status"));

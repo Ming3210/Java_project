@@ -90,6 +90,26 @@ public class CourseDAOImp implements CourseDAO{
     }
 
     @Override
+    public boolean isCourseNameExists(String courseName) {
+        boolean exists = false;
+        Connection conn = null;
+        CallableStatement callSt = null;
+        try {
+            conn = ConnectionDB.openConnection();
+            callSt = conn.prepareCall("{CALL CheckCourseNameExists(?, ?)}");
+            callSt.setString(1, courseName);
+            callSt.registerOutParameter(2, Types.BOOLEAN);
+            callSt.execute();
+            exists = callSt.getBoolean(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(conn, callSt);
+        }
+        return exists;
+    }
+
+    @Override
     public void addCourse(Course course) {
         Connection conn = null;
         CallableStatement callSt = null;
@@ -172,6 +192,22 @@ public class CourseDAOImp implements CourseDAO{
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }finally {
+            ConnectionDB.closeConnection(conn, callSt);
+        }
+    }
+
+    @Override
+    public void DeleteCourseSort(String courseId) {
+        Connection conn = null;
+        CallableStatement callSt = null;
+        try {
+            conn = ConnectionDB.openConnection();
+            callSt = conn.prepareCall("{CALL DeleteCourseSort(?)}");
+            callSt.setString(1, courseId);
+            callSt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } finally {
             ConnectionDB.closeConnection(conn, callSt);
         }
     }

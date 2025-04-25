@@ -1,7 +1,7 @@
 package ra.edu.business.dao.enrollment;
 
 import ra.edu.business.config.ConnectionDB;
-import ra.edu.business.model.RegisteredCourseDTO;
+import ra.edu.business.model.RegisteredEnrollmentDTO;
 import ra.edu.business.model.Student;
 
 import java.sql.CallableStatement;
@@ -52,11 +52,11 @@ public class EnrollmentDAOImp implements EnrollmentDAO {
     }
 
     @Override
-    public List<RegisteredCourseDTO> getAllWaitingStatusEnrollment() {
+    public List<RegisteredEnrollmentDTO> getAllWaitingStatusEnrollment() {
         Connection conn = null;
         CallableStatement callSt = null;
         ResultSet rs = null;
-        List<RegisteredCourseDTO> registeredCourseList = new ArrayList<>();
+        List<RegisteredEnrollmentDTO> registeredCourseList = new ArrayList<>();
         try {
             conn = ConnectionDB.openConnection();
             callSt = conn.prepareCall("{CALL getAllWaitingStatusEnrollment()}");
@@ -64,7 +64,7 @@ public class EnrollmentDAOImp implements EnrollmentDAO {
             if (hasResults) {
                 rs = callSt.getResultSet();
                 while (rs.next()) {
-                    RegisteredCourseDTO registeredCourse = new RegisteredCourseDTO();
+                    RegisteredEnrollmentDTO registeredCourse = new RegisteredEnrollmentDTO();
                     registeredCourse.setStudentId(rs.getString("student_id"));
                     registeredCourse.setCourseId(rs.getString("course_id"));
                     registeredCourse.setCourseName(rs.getString("name"));

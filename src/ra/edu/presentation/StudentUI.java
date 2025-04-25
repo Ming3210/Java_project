@@ -1,7 +1,7 @@
 package ra.edu.presentation;
 
 import ra.edu.business.model.Course;
-import ra.edu.business.model.RegisteredCourseDTO;
+import ra.edu.business.model.RegisteredEnrollmentDTO;
 import ra.edu.business.model.Session;
 import ra.edu.business.service.course.CourseService;
 import ra.edu.business.service.course.CourseServiceImp;
@@ -74,107 +74,156 @@ public class StudentUI {
     }
 
 
-    public static void paginatedCourse(Scanner scanner){
+    public static void paginatedCourse(Scanner scanner) {
         int totalPages = courseService.getTotalPages();
         System.out.println(BOLD + BLUE + "════════════════════════════════════════" + RESET);
         System.out.println(BOLD + BLUE + "   Tổng số trang: " + RESET + YELLOW + totalPages + RESET);
         System.out.println(BOLD + BLUE + "════════════════════════════════════════" + RESET);
 
         int currentPage = 1;
-        boolean continuePaging = true;
-        boolean isEdge = false;
 
-        while (continuePaging) {
-            if (!isEdge){
-                System.out.println(BOLD + BLUE + "\n═════════════════════════════════════" + RESET);
-                System.out.println(BOLD + BLUE + "   Trang hiện tại: " + RESET + YELLOW + currentPage + "/" + totalPages + RESET);
-                System.out.println(BOLD + BLUE + "═════════════════════════════════════" + RESET);
-                List<Course> courseList = courseService.getCoursesByPage(currentPage);
+        while (true) {
 
-                if (courseList.isEmpty()) {
-                    System.out.println(BOLD + RED + "Không có khóa học nào." + RESET);
-                } else {
-                    System.out.println(BOLD + CYAN + "❯❯❯ DANH SÁCH KHÓA HỌC ❮❮❮" + RESET);
-                    System.out.println(BOLD + "╔════════╦═══════════════════════════════════╦═══════════════╦════════════════════╗" + RESET);
-                    System.out.println(BOLD + "║   ID   ║              TÊN KHÓA HỌC         ║ THỜI LƯỢNG    ║    GIẢNG VIÊN      ║" + RESET);
-                    System.out.println(BOLD + "╠════════╬═══════════════════════════════════╬═══════════════╬════════════════════╣" + RESET);
 
-                    for (Course course : courseList) {
-                        System.out.printf(BOLD + "║" + GREEN + " %-6s " + RESET + BOLD + "║" + CYAN + " %-33s " + RESET + BOLD + "║" + YELLOW + " %-13s " + RESET + BOLD + "║" + MAGENTA + " %-18s " + RESET + BOLD + "║\n" + RESET,
-                                course.getCourseId(), course.getCourseName(), course.getDuration() + " phút", course.getInstructor());
-                    }
+            List<Course> courseList = courseService.getCoursesByPage(currentPage);
 
-                    System.out.println(BOLD + "╚════════╩═══════════════════════════════════╩═══════════════╩════════════════════╝" + RESET);
+            if (courseList.isEmpty()) {
+                System.out.println(BOLD + RED + "Không có khóa học nào." + RESET);
+            } else {
+                System.out.println(BOLD + CYAN + "❯❯❯ DANH SÁCH KHÓA HỌC ❮❮❮" + RESET);
+                System.out.println(BOLD + "╔════════╦═══════════════════════════════════╦═══════════════╦════════════════════╗" + RESET);
+                System.out.println(BOLD + "║   ID   ║              TÊN KHÓA HỌC         ║ THỜI LƯỢNG    ║    GIẢNG VIÊN      ║" + RESET);
+                System.out.println(BOLD + "╠════════╬═══════════════════════════════════╬═══════════════╬════════════════════╣" + RESET);
 
+                for (Course course : courseList) {
+                    System.out.printf(BOLD + "║" + GREEN + " %-6s " + RESET + BOLD + "║" + CYAN + " %-33s " + RESET + BOLD + "║" + YELLOW + " %-13s " + RESET + BOLD + "║" + MAGENTA + " %-18s " + RESET + BOLD + "║\n" + RESET,
+                            course.getCourseId(), course.getCourseName(), course.getDuration() + " phút", course.getInstructor());
                 }
+
+                System.out.println(BOLD + "╚════════╩═══════════════════════════════════╩═══════════════╩════════════════════╝" + RESET);
             }
 
-            System.out.println(BOLD + PURPLE + "\n┌─────────── ĐIỀU HƯỚNG ──────────────┐" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + GREEN + "1. Tiếp theo" + RESET +   "                      " + BOLD + PURPLE + "  │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + BLUE + "2. Quay lại" + RESET +   "                       " + BOLD + PURPLE + "  │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET +   "                      " + BOLD + PURPLE + " │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu quản lý khóa học" + RESET +  "  " + BOLD + PURPLE + " │" + RESET);
-            System.out.println(BOLD + PURPLE + "└─────────────────────────────────────┘" + RESET);
-            System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
-            String paginationChoice = scanner.nextLine();
-            isEdge = false;
+            for (int i = 1; i <= totalPages; i++) {
+                if (i == currentPage) {
+                    System.out.printf(BOLD + YELLOW + "[%d]   " + RESET, i);
+                } else {
+                    System.out.printf(MAGENTA + "%d   " + RESET, i);
+                }
+            }
+            System.out.println();
 
-            switch (paginationChoice) {
-                case "1":
-                    if (currentPage < totalPages) {
-                        currentPage++;
+            System.out.print(BOLD + YELLOW + "\nNhập số trang, 'n' để tiếp theo, 'p' để quay lại, '0' để thoát: " + RESET);
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("n")) {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                } else {
+                    System.out.println(BOLD + RED + "⚠ Đã ở trang cuối cùng!" + RESET);
+                }
+            } else if (input.equalsIgnoreCase("p")) {
+                if (currentPage > 1) {
+                    currentPage--;
+                } else {
+                    System.out.println(BOLD + RED + "⚠ Đã ở trang đầu tiên!" + RESET);
+                }
+            } else if (input.equals("0")) {
+                break;
+            } else {
+                try {
+                    int selectedPage = Integer.parseInt(input);
+                    if (selectedPage >= 1 && selectedPage <= totalPages) {
+                        currentPage = selectedPage;
                     } else {
-                        System.out.println(BOLD + RED + "⚠ Đã ở trang cuối cùng!" + RESET);
-                        isEdge = true;
-                        continue;
+                        System.out.println(BOLD + RED + "⚠ Số trang không hợp lệ!" + RESET);
                     }
-                    break;
-                case "2":
-                    if (currentPage > 1) {
-                        currentPage--;
-                    } else {
-                        System.out.println(BOLD + RED + "⚠ Đã ở trang đầu tiên!" + RESET);
-                        isEdge = true;
-                        continue;
-                    }
-                    break;
-                case "3":
-                    System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages + "): " + RESET);
-                    try {
-                        int selectedPage = Integer.parseInt(scanner.nextLine());
-                        if (selectedPage >= 1 && selectedPage <= totalPages) {
-                            currentPage = selectedPage;
-                        } else {
-                            System.out.println(BOLD + RED + "⚠ Số trang không hợp lệ! Vui lòng chọn từ 1 đến " + totalPages + RESET);
-                            isEdge = true;
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println(BOLD + RED + "⚠ Vui lòng nhập một số hợp lệ!" + RESET);
-                        isEdge = true;
-                    }
-                    break;
-                case "0":
-                    continuePaging = false;
-                    break;
-                default:
-                    System.out.println(BOLD + RED + "⚠ Lựa chọn không hợp lệ!" + RESET);
-                    isEdge = true;
+                } catch (NumberFormatException e) {
+                    System.out.println(BOLD + RED + "⚠ Vui lòng nhập một số hợp lệ hoặc 'n', 'p', '0'!" + RESET);
+                }
             }
         }
     }
 
 
     public static void registerEnrollment(Scanner scanner){
-        String courseId = CourseValidator.inputExistingCourseId("→ Nhập ID khóa học muốn đăng kí: ", scanner, courseService);
-//        System.out.println(Session.currentStudent.getStudentId());
-//        System.out.println(courseId);
-        String studentId = Session.currentStudent.getStudentId();
-        try {
-            studentService.registerEnrollment(studentId, courseId);
-            System.out.println(GREEN + "Đăng ký khóa học thành công!" + RESET);
-        } catch (Exception e) {
-            System.err.println(RED  + e.getMessage() + RESET);
+        int totalPages = courseService.getTotalPages();
+        System.out.println(BOLD + BLUE + "════════════════════════════════════════" + RESET);
+        System.out.println(BOLD + BLUE + "   Tổng số trang: " + RESET + YELLOW + totalPages + RESET);
+        System.out.println(BOLD + BLUE + "════════════════════════════════════════" + RESET);
+        int currentPage = 1;
+        while (true) {
+
+
+            List<Course> courseList = courseService.getCoursesByPage(currentPage);
+
+            if (courseList.isEmpty()) {
+                System.out.println(BOLD + RED + "Không có khóa học nào." + RESET);
+            } else {
+                System.out.println(BOLD + CYAN + "❯❯❯ DANH SÁCH KHÓA HỌC ❮❮❮" + RESET);
+                System.out.println(BOLD + "╔════════╦═══════════════════════════════════╦═══════════════╦════════════════════╗" + RESET);
+                System.out.println(BOLD + "║   ID   ║              TÊN KHÓA HỌC         ║ THỜI LƯỢNG    ║    GIẢNG VIÊN      ║" + RESET);
+                System.out.println(BOLD + "╠════════╬═══════════════════════════════════╬═══════════════╬════════════════════╣" + RESET);
+
+                for (Course course : courseList) {
+                    System.out.printf(BOLD + "║" + GREEN + " %-6s " + RESET + BOLD + "║" + CYAN + " %-33s " + RESET + BOLD + "║" + YELLOW + " %-13s " + RESET + BOLD + "║" + MAGENTA + " %-18s " + RESET + BOLD + "║\n" + RESET,
+                            course.getCourseId(), course.getCourseName(), course.getDuration() + " phút", course.getInstructor());
+                }
+
+                System.out.println(BOLD + "╚════════╩═══════════════════════════════════╩═══════════════╩════════════════════╝" + RESET);
+            }
+
+            for (int i = 1; i <= totalPages; i++) {
+                if (i == currentPage) {
+                    System.out.printf(BOLD + YELLOW + "[%d]   " + RESET, i);
+                } else {
+                    System.out.printf(MAGENTA + "%d   " + RESET, i);
+                }
+            }
+            System.out.println();
+
+            System.out.print(BOLD + YELLOW + "\nNhập số trang, 'n' để tiếp theo, 'p' để quay lại, 'e' để nhập Id khóa học , '0' để thoát: " + RESET);
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("n")) {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                } else {
+                    System.out.println(BOLD + RED + "⚠ Đã ở trang cuối cùng!" + RESET);
+                }
+            } else if (input.equalsIgnoreCase("p")) {
+                if (currentPage > 1) {
+                    currentPage--;
+                } else {
+                    System.out.println(BOLD + RED + "⚠ Đã ở trang đầu tiên!" + RESET);
+                }
+            }else if(input.equals("e")){
+                String courseId = CourseValidator.inputExistingCourseId("→ Nhập ID khóa học muốn đăng kí: ", scanner, courseService);
+                String studentId = Session.currentStudent.getStudentId();
+                try {
+                    studentService.registerEnrollment(studentId, courseId);
+                    System.out.println(GREEN + "Đăng ký khóa học thành công!" + RESET);
+                } catch (Exception e) {
+                    System.err.println(RED  + e.getMessage() + RESET);
+                }
+            }
+
+            else if (input.equals("0")) {
+                break;
+            } else {
+                try {
+                    int selectedPage = Integer.parseInt(input);
+                    if (selectedPage >= 1 && selectedPage <= totalPages) {
+                        currentPage = selectedPage;
+                    } else {
+                        System.out.println(BOLD + RED + "⚠ Số trang không hợp lệ!" + RESET);
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println(BOLD + RED + "⚠ Vui lòng nhập một số hợp lệ hoặc 'n', 'p', '0'!" + RESET);
+                }
+            }
         }
+
+
     }
 
     public static void showAllRegistedEnrollment(Scanner scanner){
@@ -191,7 +240,7 @@ public class StudentUI {
                 System.out.println(BOLD + BLUE + "═════════════════════════════════════" + RESET);
                 System.out.println(BOLD + BLUE + "   Trang hiện tại: " + RESET + YELLOW + currentPage + "/" + totalPages + RESET);
                 System.out.println(BOLD + BLUE + "═════════════════════════════════════" + RESET);
-                List<RegisteredCourseDTO> registeredEnrollment = studentService.getRegistedEnrollmentByPage(studentId, currentPage);
+                List<RegisteredEnrollmentDTO> registeredEnrollment = studentService.getRegistedEnrollmentByPage(studentId, currentPage);
                 if (registeredEnrollment.isEmpty()){
                     System.out.println(BOLD + RED + "Không có khóa học nào." + RESET);
                 } else {
@@ -200,7 +249,7 @@ public class StudentUI {
                     System.out.println(BOLD + "║   ID   ║         TÊN KHÓA HỌC      ║ STATUS        ║" + RESET);
                     System.out.println(BOLD + "╠════════╬═══════════════════════════╬═══════════════╣" + RESET);
 
-                    for (RegisteredCourseDTO enrollment : registeredEnrollment) {
+                    for (RegisteredEnrollmentDTO enrollment : registeredEnrollment) {
                         System.out.printf(BOLD + "║" + GREEN + " %-6s " + RESET + BOLD + "║" + CYAN + " %-25s "  +
                                         RESET+ BOLD +"║"+ YELLOW +" %-13s "+RESET+ BOLD +"║"+ BOLD+"\n" +RESET,
                                 enrollment.getCourseId(), enrollment.getCourseName(), enrollment.getStatus());
@@ -211,58 +260,44 @@ public class StudentUI {
                 }
             }
 
-            System.out.println(BOLD + PURPLE + "\n┌─────────── ĐIỀU HƯỚNG ──────────────┐" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + GREEN + "1. Tiếp theo" + RESET +   "                      " + BOLD + PURPLE + "  │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + BLUE + "2. Quay lại" + RESET +   "                       " + BOLD + PURPLE + "  │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + YELLOW + "3. Chọn trang" + RESET +   "                      " + BOLD + PURPLE + " │" + RESET);
-            System.out.println(BOLD + PURPLE + "│" + RESET + " " + RED + "0. Quay lại menu quản lý khóa học" + RESET +  "  " + BOLD + PURPLE + " │" + RESET);
-            System.out.println(BOLD + PURPLE + "└─────────────────────────────────────┘" + RESET);
-            System.out.print(BOLD + WHITE + "Chọn chức năng: " + RESET);
-            String paginationChoice = scanner.nextLine();
-            isEdge = false;
-
-            switch (paginationChoice) {
-                case "1":
-                    if (currentPage < totalPages) {
-                        currentPage++;
-                    } else {
-                        System.out.println(BOLD + RED + "⚠ Đã ở trang cuối cùng!" + RESET);
-                        isEdge = true;
-                        continue;
-                    }
-                    break;
-                case "2":
-                    if (currentPage > 1) {
-                        currentPage--;
-                    } else {
-                        System.out.println(BOLD + RED + "⚠ Đã ở trang đầu tiên!" + RESET);
-                        isEdge = true;
-                        continue;
-                    }
-                    break;
-                case "3":
-                    System.out.print(BOLD + YELLOW + "Nhập số trang cần xem (1 đến " + totalPages + "): " + RESET);
-                    try {
-                        int selectedPage = Integer.parseInt(scanner.nextLine());
-                        if (selectedPage >= 1 && selectedPage <= totalPages) {
-                            currentPage = selectedPage;
-                        } else {
-                            System.out.println(BOLD + RED + "⚠ Số trang không hợp lệ! Vui lòng chọn từ 1 đến " + totalPages + RESET);
-                            isEdge = true;
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println(BOLD + RED + "⚠ Vui lòng nhập một số hợp lệ!" + RESET);
-                        isEdge = true;
-                    }
-                    break;
-                case "0":
-                    continuePaging = false;
-                    break;
-                default:
-                    System.out.println(BOLD + RED + "⚠ Lựa chọn không hợp lệ!" + RESET);
-                    isEdge = true;
+            for (int i = 1; i <= totalPages; i++) {
+                if (i == currentPage) {
+                    System.out.printf(BOLD + YELLOW + "[%d]   " + RESET, i);
+                } else {
+                    System.out.printf(MAGENTA + "%d   " + RESET, i);
+                }
             }
+            System.out.println();
 
+            System.out.print(BOLD + YELLOW + "\nNhập số trang, 'n' để tiếp theo, 'p' để quay lại, '0' để thoát: " + RESET);
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("n")) {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                } else {
+                    System.out.println(BOLD + RED + "⚠ Đã ở trang cuối cùng!" + RESET);
+                }
+            } else if (input.equalsIgnoreCase("p")) {
+                if (currentPage > 1) {
+                    currentPage--;
+                } else {
+                    System.out.println(BOLD + RED + "⚠ Đã ở trang đầu tiên!" + RESET);
+                }
+            } else if (input.equals("0")) {
+                break;
+            } else {
+                try {
+                    int selectedPage = Integer.parseInt(input);
+                    if (selectedPage >= 1 && selectedPage <= totalPages) {
+                        currentPage = selectedPage;
+                    } else {
+                        System.out.println(BOLD + RED + "⚠ Số trang không hợp lệ!" + RESET);
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println(BOLD + RED + "⚠ Vui lòng nhập một số hợp lệ hoặc 'n', 'p', '0'!" + RESET);
+                }
+            }
         }
     }
 

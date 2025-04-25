@@ -62,4 +62,59 @@ public class CourseValidator {
             }
         }
     }
+
+    public static String inputCourseName(String message, Scanner scanner, CourseService courseService, String courseName) {
+        System.out.println(message);
+        while (true) {
+            try {
+                String name = scanner.nextLine();
+                if(name.equals(courseName)){
+                    return name;
+                }
+
+                if (name.isEmpty()) {
+                    throw new Exception(RED + "Tên khóa học không được để trống" + RESET);
+                }
+                if (!name.equals(name.trim())) {
+                    throw new Exception(RED + "Không được có khoảng trắng ở đầu hoặc cuối chuỗi" + RESET);
+                }
+
+                if (name.matches(".*\\s{2,}.*")) {
+                    throw new Exception(RED + "Không được có nhiều hơn một khoảng trắng giữa các từ" + RESET);
+                }
+                if(courseService.isCourseNameExists(name)) {
+                    throw new Exception(String.format(RED + "Tên %s đã tồn tại trong cơ sở dữ liệu" + RESET, name));
+                }
+                return name;
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
+    }
+    public static String inputCourseNameNew(String message, Scanner scanner, CourseService courseService) {
+        System.out.println(message);
+        while (true) {
+            try {
+                String name = scanner.nextLine();
+
+                if (name.isEmpty()) {
+                    throw new Exception(RED + "Tên khóa học không được để trống" + RESET);
+                }
+                if (!name.equals(name.trim())) {
+                    throw new Exception(RED + "Không được có khoảng trắng ở đầu hoặc cuối chuỗi" + RESET);
+                }
+
+                if (name.matches(".*\\s{2,}.*")) {
+                    throw new Exception(RED + "Không được có nhiều hơn một khoảng trắng giữa các từ" + RESET);
+                }
+                if (courseService.isCourseNameExists(name)) {
+                    throw new Exception(String.format(RED + "Tên %s đã tồn tại trong cơ sở dữ liệu" + RESET, name));
+                }
+                return name;
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
 }

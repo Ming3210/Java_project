@@ -1,8 +1,7 @@
 package ra.edu.presentation;
 
 import ra.edu.business.model.Course;
-import ra.edu.business.model.RegisteredCourseDTO;
-import ra.edu.business.model.Session;
+import ra.edu.business.model.RegisteredEnrollmentDTO;
 import ra.edu.business.model.Student;
 import ra.edu.business.service.course.CourseService;
 import ra.edu.business.service.course.CourseServiceImp;
@@ -535,7 +534,7 @@ public class AdminUI {
 
             switch (choice) {
                 case 1:
-                    course.setCourseName(Validator.checkString("Nhập tên mới: ",scanner, 5, 100));
+                    course.setCourseName(CourseValidator.inputCourseName("Nhập tên mới: ",scanner, courseService,course.getCourseName()));
                     break;
                 case 2:
                     course.setDuration((Validator.checkInt("Nhập thời lượng mới: ",scanner)));
@@ -718,7 +717,7 @@ public class AdminUI {
     public static void addCourse(Scanner scanner) {
         try {
             String courseId = CourseValidator.inputCourseId("Nhập ID khóa học (CXXXX):", scanner, courseService);
-            String courseName = Validator.checkString("Nhập tên khóa học:", scanner, 5, 100);
+            String courseName = CourseValidator.inputCourseNameNew("Nhập tên khóa học:", scanner, courseService);
             int duration = Validator.checkInt("Nhập thời lượng khóa học (phút):", scanner);
             String instructor = Validator.checkString("Nhập tên giảng viên:", scanner, 5, 100);
             Course newCourse = new Course();
@@ -744,9 +743,10 @@ public class AdminUI {
         if (checkConfirm) {
             try {
                 courseService.deleteCourse(courseId);
-                System.out.println("Xóa khóa học thành công!");
+//                courseService.DeleteCourseSort(courseId);
+                System.out.println(GREEN+"Xóa khóa học thành công!"+RESET);
             } catch (Exception e) {
-                System.out.println("Xóa khóa học thất bại: " + e.getMessage());
+                System.out.println(RED+"Xóa khóa học thất bại: " + e.getMessage()+RESET);
             }
         } else {
             System.out.println("❎ Hủy xóa khóa học.");
@@ -1406,7 +1406,7 @@ public class AdminUI {
     }
 
     public static void approveEnrollment(Scanner scanner){
-        List<RegisteredCourseDTO> registeredCourseList = enrollmentService.getAllWaitingStatusEnrollment();
+        List<RegisteredEnrollmentDTO> registeredCourseList = enrollmentService.getAllWaitingStatusEnrollment();
         if (registeredCourseList.isEmpty()) {
             System.out.println(BOLD + RED + "Không có yêu cầu nào đang chờ duyệt." + RESET);
             return;
@@ -1415,7 +1415,7 @@ public class AdminUI {
         System.out.println(BOLD + "╔════════╦═══════════════════════════╦══════════════╦══════════════════╗" + RESET);
         System.out.println(BOLD + "║   ID   ║         TÊN KHÓA HỌC      ║     STATUS   ║     STUDENT_ID   ║" + RESET);
         System.out.println(BOLD + "╠════════╬═══════════════════════════╬══════════════╬══════════════════╬" + RESET);
-        for (RegisteredCourseDTO registeredCourse : registeredCourseList) {
+        for (RegisteredEnrollmentDTO registeredCourse : registeredCourseList) {
             System.out.printf(BOLD + "║" + GREEN + " %-6s " + RESET + BOLD +
                             "║" + CYAN + " %-25s " + RESET + BOLD +
                             "║" + YELLOW + " %-12s " + RESET + BOLD +
@@ -1447,7 +1447,7 @@ public class AdminUI {
     }
 
     public static void deniedEnrollment(Scanner scanner){
-        List<RegisteredCourseDTO> registeredCourseList = enrollmentService.getAllWaitingStatusEnrollment();
+        List<RegisteredEnrollmentDTO> registeredCourseList = enrollmentService.getAllWaitingStatusEnrollment();
         if (registeredCourseList.isEmpty()) {
             System.out.println(BOLD + RED + "Không có yêu cầu nào đang chờ duyệt." + RESET);
             return;
@@ -1456,7 +1456,7 @@ public class AdminUI {
         System.out.println(BOLD + "╔════════╦═══════════════════════════╦══════════════╦══════════════════╗" + RESET);
         System.out.println(BOLD + "║   ID   ║         TÊN KHÓA HỌC      ║     STATUS   ║     STUDENT_ID   ║" + RESET);
         System.out.println(BOLD + "╠════════╬═══════════════════════════╬══════════════╬══════════════════╬" + RESET);
-        for (RegisteredCourseDTO registeredCourse : registeredCourseList) {
+        for (RegisteredEnrollmentDTO registeredCourse : registeredCourseList) {
             System.out.printf(BOLD + "║" + GREEN + " %-6s " + RESET + BOLD +
                             "║" + CYAN + " %-25s " + RESET + BOLD +
                             "║" + YELLOW + " %-12s " + RESET + BOLD +

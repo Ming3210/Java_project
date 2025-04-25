@@ -3,7 +3,7 @@ package ra.edu.business.service.student;
 
 import ra.edu.business.dao.student.StudentDAO;
 import ra.edu.business.dao.student.StudentDAOImp;
-import ra.edu.business.model.RegisteredCourseDTO;
+import ra.edu.business.model.RegisteredEnrollmentDTO;
 import ra.edu.business.model.Student;
 
 import java.util.List;
@@ -93,7 +93,7 @@ public class StudentServiceImp implements StudentService{
     }
 
     @Override
-    public List<RegisteredCourseDTO> showAllRegistedEnrollment(String studentId) {
+    public List<RegisteredEnrollmentDTO> showAllRegistedEnrollment(String studentId) {
         return studentDAO.showAllRegistedEnrollment(studentId);
     }
 
@@ -118,7 +118,7 @@ public class StudentServiceImp implements StudentService{
     }
 
     @Override
-    public List<RegisteredCourseDTO> getRegistedEnrollmentByPage(String studentId, int page) {
+    public List<RegisteredEnrollmentDTO> getRegistedEnrollmentByPage(String studentId, int page) {
         return studentDAO.getRegistedEnrollmentByPage(studentId,page);
     }
 

@@ -3,7 +3,7 @@ package ra.edu.business.service.enrollment;
 
 import ra.edu.business.dao.enrollment.EnrollmentDAO;
 import ra.edu.business.dao.enrollment.EnrollmentDAOImp;
-import ra.edu.business.model.RegisteredCourseDTO;
+import ra.edu.business.model.RegisteredEnrollmentDTO;
 import ra.edu.business.model.Student;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class EnrollmentServiceImp implements EnrollmentService{
     }
 
     @Override
-    public List<RegisteredCourseDTO> getAllWaitingStatusEnrollment() {
+    public List<RegisteredEnrollmentDTO> getAllWaitingStatusEnrollment() {
         return enrollmentDAO.getAllWaitingStatusEnrollment();
     }
 

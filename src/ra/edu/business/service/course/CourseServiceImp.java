@@ -34,6 +34,11 @@ public class CourseServiceImp implements CourseService{
     }
 
     @Override
+    public boolean isCourseNameExists(String courseName) {
+        return courseDAO.isCourseNameExists(courseName);
+    }
+
+    @Override
     public void addCourse(Course course) {
         courseDAO.addCourse(course);
     }
@@ -51,6 +56,11 @@ public class CourseServiceImp implements CourseService{
     @Override
     public void deleteCourse(String courseId) {
         courseDAO.deleteCourse(courseId);
+    }
+
+    @Override
+    public void DeleteCourseSort(String courseId) {
+        courseDAO.DeleteCourseSort(courseId);
     }
 
     @Override

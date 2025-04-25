@@ -1,6 +1,6 @@
 package ra.edu.business.dao.student;
 
-import ra.edu.business.model.RegisteredCourseDTO;
+import ra.edu.business.model.RegisteredEnrollmentDTO;
 import ra.edu.business.model.Student;
 
 import java.util.List;
@@ -21,10 +21,10 @@ public interface StudentDAO {
     List<Student> SortStudentByIdDesc(int page);
     Student getStudentByEmail(String email);
     void registerEnrollment(String studentId, String courseId);
-    List<RegisteredCourseDTO> showAllRegistedEnrollment(String studentId);
+    List<RegisteredEnrollmentDTO> showAllRegistedEnrollment(String studentId);
     void cancelEnrollment(String studentId, String courseId);
     boolean checkOldPassword(String studentId, String password);
     void updatePassword(String studentId, String password);
     int getTotalRegistedEnrollmentPages(String studentId);
-    List<RegisteredCourseDTO> getRegistedEnrollmentByPage(String studentId, int page);
+    List<RegisteredEnrollmentDTO> getRegistedEnrollmentByPage(String studentId, int page);
 }

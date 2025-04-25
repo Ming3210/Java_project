@@ -1,19 +1,19 @@
 package ra.edu.business.model;
 
-public class RegisteredCourseDTO {
+public class RegisteredEnrollmentDTO {
     private String courseId;
     private String courseName;
     private String status;
     private String studentId;
 
-    public RegisteredCourseDTO(String courseId, String courseName, String status, String studentId) {
+    public RegisteredEnrollmentDTO(String courseId, String courseName, String status, String studentId) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.status = status;
         this.studentId = studentId;
     }
 
-    public RegisteredCourseDTO(String courseId, String courseName, String status) {
+    public RegisteredEnrollmentDTO(String courseId, String courseName, String status) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.status = status;
@@ -27,7 +27,7 @@ public class RegisteredCourseDTO {
         this.studentId = studentId;
     }
 
-    public RegisteredCourseDTO() {
+    public RegisteredEnrollmentDTO() {
     }
 
     public String getCourseId() {
